@@ -5,6 +5,7 @@ import ru.practicum.shareit.item.dao.ItemDao;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 @Component
 public class ItemDaoImpl implements ItemDao {
 
+    private final HashMap<Integer, Item> items = new HashMap<>();
 
     @Override
     public Item create(Item item) {

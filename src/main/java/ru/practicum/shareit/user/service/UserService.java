@@ -66,7 +66,7 @@ public class UserService {
 
     private void checkDoubleEmail(UserDto user) {
 
-        if (!userDao.users.values().stream()
+        if (!userDao.findAllUsers().stream()
                 .noneMatch(p -> p.getEmail().equals(user.getEmail()))) {
             throw new ValidationException("double email");
         }

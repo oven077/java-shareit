@@ -5,6 +5,7 @@ import ru.practicum.shareit.user.dao.UserDao;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 @Component
 public class UserDaoImpl implements UserDao {
 
+    private final HashMap<Integer, User> users = new HashMap<>();
 
     @Override
     public User create(User user) {

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 
 public interface ItemDao extends Dao<Item> {
-    HashMap<Integer, Item> items = new HashMap<>();
 
     Optional<Item> findItemByIdWithUser(int itemId, int userId);
 
