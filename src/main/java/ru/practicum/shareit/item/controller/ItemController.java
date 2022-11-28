@@ -51,8 +51,8 @@ public class ItemController {
 
     @GetMapping("/search")
     @Validated
-    public Collection<ItemDto> getAllItemsWithSearch(@Valid @RequestParam(defaultValue = "///") String text
-            , @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public Collection<ItemDto> getAllItemsWithSearch(@Valid @RequestParam(defaultValue = "///") String text,
+                                                     @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getAllItemsWithSearch");
         return itemService.getAllItemsWithSearch(userId, text);
     }
