@@ -21,14 +21,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Collection<User> readAll() {
-      return findAllUsers();
+        return findAllUsers();
     }
 
 
     @Override
     public User readOne(int id) {
 
-        if (findUserById(id).isPresent()){
+        if (findUserById(id).isPresent()) {
             return findUserById(id).get();
         } else {
             return null;
@@ -46,8 +46,6 @@ public class UserDaoImpl implements UserDao {
     public void delete(int id) {
         users.remove(id);
     }
-
-
 
 
     @Override

@@ -32,11 +32,10 @@ public class UserController {
 
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable int id,@RequestBody UserDto user) {
+    public UserDto updateUser(@PathVariable int id, @RequestBody UserDto user) {
         log.info("controller:method userController -> updateUser");
-        return userService.updateUser(user,id);
+        return userService.updateUser(user, id);
     }
-
 
 
     @GetMapping("/{id}")
@@ -57,11 +56,6 @@ public class UserController {
         log.info("controller:method userController -> deleteUser");
         userService.deleteUser(id);
     }
-
-
-
-
-
 
 
 }

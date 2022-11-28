@@ -15,10 +15,9 @@ import java.util.stream.Collectors;
 @Component
 public class ItemService {
 
-    int id = 1;
-
     private final UserDao userDao;
     private final ItemDao itemDao;
+    int id = 1;
 
     public ItemService(UserDao userDao, ItemDao itemDao) {
         this.userDao = userDao;
@@ -44,7 +43,7 @@ public class ItemService {
             return ItemMapper.INSTANCE.itemToItemDto(itemDao.update(ItemMapper.INSTANCE
                     .updateUserFromDto(item, itemDao.findItemByIdWithUser(itemId, userId).get()), userId));
         } else {
-            throw new NotFoundException("No Item with this ID or wrong ID owner: " + userId) ;
+            throw new NotFoundException("No Item with this ID or wrong ID owner: " + userId);
         }
     }
 

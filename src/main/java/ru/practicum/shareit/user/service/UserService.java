@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exceptions.NoSuchUserException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.user.dao.UserDao;
-import ru.practicum.shareit.user.dao.impl.UserDaoImpl;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.mappers.UserMapper;
 import ru.practicum.shareit.user.model.User;
