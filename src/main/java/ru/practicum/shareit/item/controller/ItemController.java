@@ -2,8 +2,11 @@ package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.error.AppError;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -20,42 +23,77 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class ItemController {
 
-    final ItemService itemService;
+    private final ItemService itemService;
 
     @PostMapping()
-    public ItemDto createItem(@Valid @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId
+    public ResponseEntity<?> createItem(@Valid @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId
     ) {
         log.info("controller:method itemController -> createItem");
-        return itemService.createItem(item, userId);
+        try {
+            ItemDto itemDto = itemService.createItem(item, userId);
+            return new ResponseEntity<>(itemDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+                    "Could not create item " + item),
+                    HttpStatus.NOT_FOUND);
+        }
     }
 
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@PathVariable int itemId, @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<?> updateItem(@PathVariable int itemId, @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> updateItem");
-        return itemService.updateItem(item, itemId, userId);
+        try {
+            ItemDto itemDto = itemService.updateItem(item, itemId, userId);
+            return new ResponseEntity<>(itemDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+                    "Could not update item " + itemId),
+                    HttpStatus.NOT_FOUND);
+        }
     }
 
 
     @GetMapping("/{itemId}")
-    public ItemDto getItemById(@PathVariable int itemId) {
+    public ResponseEntity<?> getItemById(@PathVariable int itemId) {
         log.info("controller:method itemController -> getItemById");
-        return itemService.getItem(itemId);
+        try {
+            ItemDto item = itemService.getItem(itemId);
+            return new ResponseEntity<>(item, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+                    "Item with id " + itemId + " not found"),
+                    HttpStatus.NOT_FOUND);
+        }
     }
 
+
     @GetMapping()
-    public Collection<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<?> getAllItems(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getAllItems");
-        return itemService.getAllItems(userId);
+        try {
+            Collection<ItemDto> listItems = itemService.getAllItems(userId);
+            return new ResponseEntity<>(listItems, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+                    "Empty list of items"),
+                    HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/search")
     @Validated
-    public Collection<ItemDto> getAllItemsWithSearch(@Valid @RequestParam(defaultValue = "///") String text,
-                                                     @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<?> getAllItemsWithSearch(@Valid @RequestParam(defaultValue = "///") String text,
+                                                   @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getAllItemsWithSearch");
-        return itemService.getAllItemsWithSearch(userId, text);
+
+        try {
+            Collection<ItemDto> listItems = itemService.getAllItemsWithSearch(userId, text);
+            return new ResponseEntity<>(listItems, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+                    "Not match with filter"),
+                    HttpStatus.NOT_FOUND);
+        }
     }
-
-
 }

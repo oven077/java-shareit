@@ -1,7 +1,11 @@
 package ru.practicum.shareit.user.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.error.AppError;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -17,7 +21,6 @@ import java.util.Collection;
 public class UserController {
 
     private final UserService userService;
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -25,30 +28,60 @@ public class UserController {
 
     //add user
     @PostMapping()
-    public UserDto createUser(@Valid @RequestBody UserDto user) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto user) {
         log.info("controller:method userController -> createUser");
-        return userService.createUser(user);
+        try {
+            UserDto userDto = userService.createUser(user);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Could not create user " + user),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable int id, @RequestBody UserDto user) {
+    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody UserDto user) {
         log.info("controller:method userController -> updateUser");
-        return userService.updateUser(user, id);
+
+        try {
+            UserDto userDto = userService.updateUser(user, id);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Could not update user " + user),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
     @GetMapping("/{id}")
-    public UserDto getUser(@PathVariable int id) {
+    public ResponseEntity<?> getUser(@PathVariable int id) {
         log.info("controller:method userController -> getUser");
-        return userService.getUser(id);
+        try {
+            UserDto userDto = userService.getUser(id);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Could not get user by id" + id),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
     @GetMapping()
-    public Collection<UserDto> getUsers() {
+    public ResponseEntity<?> getUsers() {
         log.info("controller:method userController -> getAllUsers");
-        return userService.getUsers();
+
+        try {
+            Collection<UserDto> userDto = userService.getUsers();
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Empty list of users"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +89,4 @@ public class UserController {
         log.info("controller:method userController -> deleteUser");
         userService.deleteUser(id);
     }
-
-
 }

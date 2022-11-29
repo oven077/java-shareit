@@ -14,8 +14,8 @@ import java.util.List;
 @Component
 public class UserService {
 
-    final UserDao userDao;
-    int id = 1;
+    private final UserDao userDao;
+    private int id = 1;
 
 
     public UserService(UserDao userDao) {
