@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl_old implements UserDao {
 
     private final HashMap<Integer, User> users = new HashMap<>();
 
