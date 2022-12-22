@@ -41,39 +41,39 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
 
     }
-//
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<?> getUser(@PathVariable int id) {
-//        log.info("controller:method userController -> getUser");
-//        try {
-//            UserDto userDto = userService.getUser(id);
-//            return new ResponseEntity<>(userDto, HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-//                    "Could not get user by id" + id),
-//                    HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//
-//    @GetMapping()
-//    public ResponseEntity<?> getUsers() {
-//        log.info("controller:method userController -> getAllUsers");
-//
-//        try {
-//            Collection<UserDto> userDto = userService.getUsers();
-//            return new ResponseEntity<>(userDto, HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-//                    "Empty list of users"),
-//                    HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public void deleteUser(@PathVariable int id) {
-//        log.info("controller:method userController -> deleteUser");
-//        userService.deleteUser(id);
-//    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUser(@PathVariable int id) {
+        log.info("controller:method userController -> getUser");
+        try {
+            UserDto userDto = userService.getUser(id);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Could not get user by id" + id),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping()
+    public ResponseEntity<?> getUsers() {
+        log.info("controller:method userController -> getAllUsers");
+
+        try {
+            Collection<UserDto> userDto = userService.getUsers();
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Empty list of users"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable int id) {
+        log.info("controller:method userController -> deleteUser");
+        userService.deleteUser(id);
+    }
 }
