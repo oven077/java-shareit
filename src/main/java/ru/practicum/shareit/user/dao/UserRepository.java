@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Override
     @Query(value = "select * from users as u where u.id = ?", nativeQuery = true)
-    public Optional<User> findById(@Param("id") Integer id);
+    Optional<User> findById(@Param("id") Integer id);
 
 
 }

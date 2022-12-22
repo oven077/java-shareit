@@ -17,6 +17,8 @@ import java.io.Serializable;
 @Table(schema = "public", name = "items")
 public class Item implements Serializable {
     @Id
+    @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "pk_sequence_1", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence_1")
     @Column(name = "id")
     public int id;
     public String name;

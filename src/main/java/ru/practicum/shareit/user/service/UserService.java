@@ -14,7 +14,6 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private int id = 1;
 
 
     public UserService(UserRepository userRepository) {
