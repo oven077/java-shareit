@@ -50,11 +50,12 @@ public class ItemController {
 
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<?> getItemById(@PathVariable int itemId) {
+    public ResponseEntity<?> getItemById(@PathVariable int itemId,
+                                         @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getItemById");
         try {
-            ItemDto item = itemService.getItem(itemId);
-            return new ResponseEntity<>(item, HttpStatus.OK);
+                return new ResponseEntity<>(itemService.getItemBookings(itemId, userId), HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
                     "Item with id " + itemId + " not found"),

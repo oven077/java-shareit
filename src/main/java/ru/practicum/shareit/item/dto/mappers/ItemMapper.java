@@ -17,7 +17,6 @@ public interface ItemMapper {
 
     ItemMapper INSTANCE = Mappers.getMapper(ItemMapper.class);
 
-
     ItemDto itemToItemDto(Item item);
 
     Item itemDtoToItem(ItemDto itemDto);

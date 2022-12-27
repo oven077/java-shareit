@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,8 +13,8 @@ import java.io.Serializable;
 
 @Entity
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(schema = "public", name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
-
 public class User implements Serializable {
 
     @Id
@@ -22,7 +23,7 @@ public class User implements Serializable {
     @Column(name = "id")
     private int id;
     private String name;
-    @Column(name = "email")
+    @Column(unique = true, name = "email")
     @Email
     private String email;
 }

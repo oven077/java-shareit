@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import ru.practicum.shareit.booking.enums.Status;
 import ru.practicum.shareit.item.model.Item;
@@ -13,24 +14,27 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(schema = "public", name = "bookings")
 public class Booking {
 
     @Id
+    @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "pk_sequence_2", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence_2")
     @Column(name = "id")
-    public int id;
+    private int id;
     @Column(name = "start_date")
-    public LocalDateTime start;
+    private LocalDateTime start;
     @Column(name = "end_date")
-    public LocalDateTime end;
+    private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    public Item item;
+    private Item item;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booker_id")
-    public User booker;
+    private User booker;
     @Enumerated(EnumType.STRING)
-    public Status status;
+    private Status status;
 
 }

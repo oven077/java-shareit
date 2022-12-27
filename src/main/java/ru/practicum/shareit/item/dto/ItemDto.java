@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.model.Booking;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -23,5 +25,10 @@ public class ItemDto {
 
     @NotNull
     private Boolean available;
+
+    private BookingDto lastBooking;
+    private BookingDto nextBooking;
+
+
 
 }
