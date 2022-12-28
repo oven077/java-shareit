@@ -5,6 +5,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -13,18 +14,21 @@ import javax.persistence.*;
 public class Comment {
 
     @Id
+    @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "pk_sequence_3", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence_3")
     @Column(name = "id")
-    public int id;
-    public String text;
+    private int id;
+    private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    public Item item;
+    private Item item;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    public User author;
+    private User author;
+    private LocalDateTime created;
 
 
 }

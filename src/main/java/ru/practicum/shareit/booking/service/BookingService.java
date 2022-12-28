@@ -106,7 +106,6 @@ public class BookingService {
             }
 
 
-
             booking.setStatus(Status.APPROVED);
 
             return BookingMapper.INSTANCE.bookingToBookingDto(bookingRepository.save(booking));
@@ -181,10 +180,10 @@ public class BookingService {
                 result = bookingRepository.findFutureByBooker(booker, LocalDateTime.now());
                 break;
             case WAITING:
-                result = bookingRepository.findAllByBookerAndStatusOrderByStartDesc(booker, State.WAITING);
+                result = bookingRepository.findAllByBookerAndStatusOrderByStartDesc(booker, Status.WAITING);
                 break;
             case REJECTED:
-                result = bookingRepository.findAllByBookerAndStatusOrderByStartDesc(booker, State.REJECTED);
+                result = bookingRepository.findAllByBookerAndStatusOrderByStartDesc(booker, Status.REJECTED);
                 break;
 
             case UNKNOWN:
@@ -226,10 +225,10 @@ public class BookingService {
                 result = bookingRepository.findFutureByOwner(owner, LocalDateTime.now());
                 break;
             case WAITING:
-                result = bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(owner, State.WAITING);
+                result = bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(owner, Status.WAITING, LocalDateTime.now());
                 break;
             case REJECTED:
-                result = bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(owner, State.REJECTED);
+                result = bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(owner, Status.REJECTED, LocalDateTime.now());
                 break;
 
             case UNKNOWN:
@@ -249,7 +248,7 @@ public class BookingService {
             booking = bookingRepository.findById(bookingId).get();
 
             if (booking.getItem().getOwner().getId() != userId) {
-                throw new NotFoundException("only owner of item can make aprove");
+                throw new NotFoundException("only owner of item can make approve");
             }
 
             booking.setStatus(Status.REJECTED);

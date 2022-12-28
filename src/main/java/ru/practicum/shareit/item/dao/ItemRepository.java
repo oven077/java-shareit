@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
 
@@ -14,15 +13,9 @@ import java.util.Optional;
 @Transactional
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
-//    @Override
-//    @Query(value = "select * from items as i where i.id = ?", nativeQuery = true)
-//    Optional<Item> findById(@Param("id") Integer integer);
-
 
     @Query(value = "select * from items as i where i.id = ? and i.owner_id = ?", nativeQuery = true)
     Optional<Item> findByItemAndOwnerId(@Param("id") Integer itemId, @Param("owner_id") Integer ownerId);
-
-//    Booking findFirstByItem_IdAndStatusAndStartIsBeforeOrderByStartDesc(int itemId, Status status, LocalDateTime now);
 
 
     @Query(value = "select b.start_date, b.booker_id, b.item_id, b.end_date, b.id, b.status, i.name\n" +
@@ -30,10 +23,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             "FROM bookings b\n" +
             "         inner join items i on i.id = b.item_id\n" +
             "where i.owner_id = 4\n" +
-            "order by b.start_date asc" , nativeQuery = true)
+            "order by b.start_date asc", nativeQuery = true)
     List<Booking> findLastBooking(@Param("id") Integer itemId, @Param("owner_id") Integer ownerId);
-
-
 
 
     @Query(value = "select b, b.booker.id as bookerId from Booking b where b.item.id = :id" +

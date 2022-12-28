@@ -25,7 +25,7 @@ public interface ItemMapper {
 
 
     @Mapping(target = "id", ignore = true)
-    Item updateUserFromDto(ItemDto itemDto, @MappingTarget Item item);
+    Item updateItemFromDto(ItemDto itemDto, @MappingTarget Item item);
 
 
 }

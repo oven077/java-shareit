@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.error.AppError;
+import ru.practicum.shareit.exceptions.BadRequestException;
+import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -54,12 +57,31 @@ public class ItemController {
                                          @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getItemById");
         try {
-                return new ResponseEntity<>(itemService.getItemBookings(itemId, userId), HttpStatus.OK);
+            return new ResponseEntity<>(itemService.getItemBookings(itemId, userId), HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
                     "Item with id " + itemId + " not found"),
                     HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public ResponseEntity<?> addCommentByItemId(@PathVariable int itemId,
+                                                @RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
+                                                @RequestBody @Valid CommentDto commentDto) {
+        log.info("controller:method itemController -> getItemById");
+        try {
+            return new ResponseEntity<>(itemService.addCommentByItemId(itemId, userId, commentDto), HttpStatus.OK);
+
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+                    "Item with id " + itemId + " not found"),
+                    HttpStatus.NOT_FOUND);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
+                    "Item with id " + itemId + " not found"),
+                    HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -92,4 +114,6 @@ public class ItemController {
                     HttpStatus.NOT_FOUND);
         }
     }
+
+
 }
