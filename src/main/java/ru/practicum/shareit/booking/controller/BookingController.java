@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.enums.State;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.error.AppError;
 import ru.practicum.shareit.exceptions.BadRequestException;
@@ -32,7 +31,7 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     public ResponseEntity<?> approveBooking(@PathVariable int bookingId, @Valid @RequestParam Boolean approved, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> updateItem");
-        if(approved){
+        if (approved) {
             return new ResponseEntity<>(bookingService.approveBooking(bookingId, approved, userId), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(bookingService.rejectBooking(bookingId, approved, userId), HttpStatus.OK);

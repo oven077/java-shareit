@@ -13,7 +13,7 @@ public enum State {
     REJECTED,
     UNKNOWN;
 
-    public static State of(String value){
+    public static State of(String value) {
         return Arrays.stream(values())
                 .filter(item -> Objects.equals(value, item.name()))
                 .findFirst()

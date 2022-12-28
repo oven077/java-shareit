@@ -15,8 +15,7 @@ public interface CommentMapper {
 
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    @Mapping(source = "author.name",target ="authorName" )
-
+    @Mapping(source = "author.name", target = "authorName")
     CommentDto commentToCommentDto(Comment comment);
 
     Comment commentDtoToComment(CommentDto commentDto);
