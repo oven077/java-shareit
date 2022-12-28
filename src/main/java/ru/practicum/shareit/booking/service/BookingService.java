@@ -30,7 +30,6 @@ public class BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
-
     public BookingService(BookingRepository bookingRepository, UserRepository userRepository, ItemRepository itemRepository) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
@@ -192,8 +191,8 @@ public class BookingService {
         }
 
 
-        return result.stream().
-                map(BookingMapper.INSTANCE::bookingToBookingDto)
+        return result.stream()
+                .map(BookingMapper.INSTANCE::bookingToBookingDto)
                 .collect(Collectors.toList());
     }
 
@@ -235,8 +234,8 @@ public class BookingService {
             default:
                 throw new UnsupportedState("Unknown state: UNSUPPORTED_STATUS");
         }
-        return result.stream().
-                map(BookingMapper.INSTANCE::bookingToBookingDto)
+        return result.stream()
+                .map(BookingMapper.INSTANCE::bookingToBookingDto)
                 .collect(Collectors.toList());
     }
 
