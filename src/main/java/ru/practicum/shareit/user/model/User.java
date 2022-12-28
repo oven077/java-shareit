@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.io.Serializable;
 
 /**
  * TODO Sprint add-controllers.
@@ -15,7 +14,7 @@ import java.io.Serializable;
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(schema = "public", name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
-public class User implements Serializable {
+public class User {
 
     @Id
     @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "pk_sequence", allocationSize = 1)

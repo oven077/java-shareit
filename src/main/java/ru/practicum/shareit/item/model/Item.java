@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(schema = "public", name = "items")
-public class Item implements Serializable {
+public class Item {
     @Id
     @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "pk_sequence_1", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence_1")
