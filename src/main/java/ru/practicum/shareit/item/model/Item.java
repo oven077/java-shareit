@@ -6,7 +6,6 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * TODO Sprint add-controllers.
