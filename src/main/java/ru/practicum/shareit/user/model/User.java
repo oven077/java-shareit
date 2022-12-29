@@ -17,7 +17,7 @@ import javax.validation.constraints.Email;
 public class User {
 
     @Id
-    @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "pk_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "users_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = "id")
     private int id;

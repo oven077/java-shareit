@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 public class Booking {
 
     @Id
-    @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "pk_sequence_2", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence_2")
+    @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "booking_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = "id")
     private int id;
     @Column(name = "start_date")
