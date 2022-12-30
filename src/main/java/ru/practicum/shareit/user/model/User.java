@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
