@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.error.AppError;
-import ru.practicum.shareit.exceptions.BadRequestException;
-import ru.practicum.shareit.exceptions.NoSuchUserException;
-import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidationException;
+import ru.practicum.shareit.exceptions.*;
 
 @RestControllerAdvice
 @Slf4j
@@ -30,10 +27,10 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(NoSuchUserException.class)
-    public ResponseEntity<AppError> catchResourceNoSuchUserExceptionForClient(BadRequestException e) {
+    public ResponseEntity<AppError> catchResourceNoSuchUserExceptionForClient(NoSuchUserException e) {
         log.error(e.getMessage(), e);
-        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), e.getMessage()),
+                HttpStatus.NOT_FOUND);
     }
 
 
@@ -42,6 +39,13 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnsupportedState.class)
+    public ResponseEntity<AppError> catchResourceNotFoundExceptionForClient_badRequest_UnsupportedState(UnsupportedState e) {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+                HttpStatus.BAD_REQUEST);
     }
 
 

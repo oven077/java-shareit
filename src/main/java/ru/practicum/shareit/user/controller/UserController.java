@@ -1,10 +1,8 @@
 package ru.practicum.shareit.user.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.error.AppError;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -17,58 +15,43 @@ import java.util.Collection;
 @RestController
 @Slf4j
 @RequestMapping(path = "/users")
+@RequiredArgsConstructor
+
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     //add user
     @PostMapping()
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto user) {
+    public UserDto createUser(@Valid @RequestBody UserDto user) {
         log.info("controller:method userController -> createUser");
-        UserDto userDto = userService.createUser(user);
-        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
+
+        return userService.createUser(user);
     }
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody UserDto user) {
+    public UserDto updateUser(@PathVariable int id, @RequestBody UserDto user) {
         log.info("controller:method userController -> updateUser");
 
-        UserDto userDto = userService.updateUser(user, id);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
-
+        return userService.updateUser(user, id);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable int id) {
+    public UserDto getUser(@PathVariable int id) {
         log.info("controller:method userController -> getUser");
-        try {
-            UserDto userDto = userService.getUser(id);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "Could not get user by id" + id),
-                    HttpStatus.NOT_FOUND);
-        }
+
+        return userService.getUser(id);
     }
 
 
     @GetMapping()
-    public ResponseEntity<?> getUsers() {
+    public Collection<UserDto> getUsers() {
         log.info("controller:method userController -> getAllUsers");
 
-        try {
-            Collection<UserDto> userDto = userService.getUsers();
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "Empty list of users"),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return userService.getUsers();
+
     }
 
     @DeleteMapping("/{id}")

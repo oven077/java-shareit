@@ -42,42 +42,39 @@ public class BookingService {
         Boolean isAvailable;
         int itemId;
 
+
+        itemRepository.findById(bookingDto.getItemId()).orElseThrow(() -> new NotFoundException("Not found item with id: " + bookingDto.getId()));
+
         item = itemRepository.findById(bookingDto.getItemId());
 
-        if (item.isPresent()) {
-
-            itemId = item.get().getId();
-            isAvailable = item.get().getAvailable();
+        itemId = item.get().getId();
+        isAvailable = item.get().getAvailable();
 
 
-            if (!isAvailable) {
-                throw new BadRequestException("Item is not available: " + itemId);
-            }
+        if (!isAvailable) {
+            throw new BadRequestException("Item is not available: " + itemId);
+        }
 
-            if (item.get().getOwner().getId() == userId) {
-                throw new NotFoundException("Owner can not book self item");
-            }
+        if (item.get().getOwner().getId() == userId) {
+            throw new NotFoundException("Owner can not book self item");
+        }
 
 
-            if (!userRepository.findById(userId).isPresent()) {
-                throw new NotFoundException("User not found: " + userId);
-            }
+        if (!userRepository.findById(userId).isPresent()) {
+            throw new NotFoundException("User not found: " + userId);
+        }
 
-            if (item.get().getOwner().getId() == userId) {
-                throw new BadRequestException("Could not find user: " + userId);
-            }
+        if (item.get().getOwner().getId() == userId) {
+            throw new BadRequestException("Could not find user: " + userId);
+        }
 
-            if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
-                throw new BadRequestException("End time has to be after start time");
-            }
+        if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
+            throw new BadRequestException("End time has to be after start time");
+        }
 
-            if (bookingDto.getStart().isBefore((LocalDateTime.now())) ||
-                    bookingDto.getEnd().isBefore((LocalDateTime.now()))) {
-                throw new BadRequestException("Start time and end time has to be after current time");
-            }
-
-        } else {
-            throw new NotFoundException("Not found item with id: " + bookingDto.getId());
+        if (bookingDto.getStart().isBefore((LocalDateTime.now())) ||
+                bookingDto.getEnd().isBefore((LocalDateTime.now()))) {
+            throw new BadRequestException("Start time and end time has to be after current time");
         }
 
         bookingDto.setStatus(Status.WAITING);
@@ -88,30 +85,30 @@ public class BookingService {
                 .INSTANCE.bookingDtoToBooking(bookingDto)));
     }
 
-    public BookingDto approveBooking(int bookingId, Boolean approve, int userId) {
+    public BookingDto setApproveOrRejectBooking(int bookingId, Boolean approve, int userId) {
 
         Booking booking;
 
-        if (bookingRepository.findById(bookingId).isPresent()) {
+        bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Not found booking with id: " + bookingId));
 
-            booking = bookingRepository.findById(bookingId).get();
+        booking = bookingRepository.findById(bookingId).get();
 
-            if (booking.getItem().getOwner().getId() != userId) {
-                throw new NotFoundException("only owner of item can make approve");
-            }
-
-            if (booking.getStatus() == Status.APPROVED) {
-                throw new BadRequestException("double approve");
-            }
-
-
-            booking.setStatus(Status.APPROVED);
-
-            return BookingMapper.INSTANCE.bookingToBookingDto(bookingRepository.save(booking));
-
-        } else {
-            throw new NotFoundException("Not found booking with id: " + bookingId);
+        if (booking.getItem().getOwner().getId() != userId) {
+            throw new NotFoundException("only owner of item can make approve");
         }
+
+        if (booking.getStatus() == Status.APPROVED) {
+            throw new BadRequestException("double approve");
+        }
+
+        if (approve) {
+            booking.setStatus(Status.APPROVED);
+        } else {
+            booking.setStatus(Status.REJECTED);
+        }
+
+        return BookingMapper.INSTANCE.bookingToBookingDto(bookingRepository.save(booking));
+
     }
 
     public BookingDto getBooking(int bookingId, @Min(1) int userId) {
@@ -125,32 +122,22 @@ public class BookingService {
 
         if (booking.getItem().getOwner().getId() != userId && booking.getBooker().getId() != userId) {
             throw new NotFoundException("Bad user booking: " + userId);
-
         }
 
-
         return BookingMapper.INSTANCE.bookingToBookingDto(booking);
-
-
     }
 
     public Collection<BookingDto> getAllBookings(int userId) {
 
-        if (userRepository.findById(userId).isPresent()) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Not found user with id: " + userId));
 
-            return BookingMapper.INSTANCE
-                    .sourceListToTargetList(bookingRepository.findAll().stream()
-                            .filter(p -> p.getBooker().getId() == userId)
-                            .collect(Collectors.toList()));
-
-        } else {
-            throw new NotFoundException("Not found user with id: " + userId);
-        }
-
-
+        return BookingMapper.INSTANCE
+                .sourceListToTargetList(bookingRepository.findAll().stream()
+                        .filter(p -> p.getBooker().getId() == userId)
+                        .collect(Collectors.toList()));
     }
 
-    public Object getAll(int userId, String state) {
+    public List<BookingDto> getAll(int userId, String state) {
 
         List<Booking> result;
         User booker;
@@ -196,7 +183,7 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
-    public Object getOwnerItemsAll(int userId, String state) {
+    public List<BookingDto> getOwnerItemsAll(int userId, String state) {
 
         List<Booking> result;
         User owner;
@@ -206,7 +193,6 @@ public class BookingService {
         } else {
             throw new NotFoundException("Not found booking with id: " + userId);
         }
-
 
         State bookingState = Objects.isNull(state) ? State.ALL : State.of(state);
 
@@ -234,28 +220,9 @@ public class BookingService {
             default:
                 throw new UnsupportedState("Unknown state: UNSUPPORTED_STATUS");
         }
+
         return result.stream()
                 .map(BookingMapper.INSTANCE::bookingToBookingDto)
                 .collect(Collectors.toList());
-    }
-
-    public Object rejectBooking(int bookingId, Boolean approved, int userId) {
-        Booking booking;
-
-        if (bookingRepository.findById(bookingId).isPresent()) {
-
-            booking = bookingRepository.findById(bookingId).get();
-
-            if (booking.getItem().getOwner().getId() != userId) {
-                throw new NotFoundException("only owner of item can make approve");
-            }
-
-            booking.setStatus(Status.REJECTED);
-
-            return BookingMapper.INSTANCE.bookingToBookingDto(bookingRepository.save(booking));
-
-        } else {
-            throw new NotFoundException("Not found booking with id: " + bookingId);
-        }
     }
 }
