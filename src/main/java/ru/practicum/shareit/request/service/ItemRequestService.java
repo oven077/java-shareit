@@ -34,11 +34,11 @@ public class ItemRequestService {
         ItemRequest itemRequest;
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
-        itemRequest = ItemRequestMapper.INSTANCE.ItemRequestDtoToItemRequest(itemRequestDto);
+        itemRequest = ItemRequestMapper.INSTANCE.itemRequestDtoToItemRequest(itemRequestDto);
         itemRequest.setRequestor(userRepository.findById(userId).get());
         itemRequest.setCreated(LocalDateTime.now());
 
-        return ItemRequestMapper.INSTANCE.ItemRequestToItemRequestDto(itemRequestRepository.save(itemRequest));
+        return ItemRequestMapper.INSTANCE.itemRequestToItemRequestDto(itemRequestRepository.save(itemRequest));
 
     }
 
@@ -76,8 +76,8 @@ public class ItemRequestService {
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
 
-        itemRequestDtoList = ItemRequestMapper.INSTANCE.sourceListToTargetList(itemRequestRepository.
-                findAllOtherItemRequests(userId, pageable));
+        itemRequestDtoList = ItemRequestMapper.INSTANCE.sourceListToTargetList(itemRequestRepository
+                .findAllOtherItemRequests(userId, pageable));
 
 
         for (ItemRequestDto itemRequestDto : itemRequestDtoList) {
@@ -102,7 +102,7 @@ public class ItemRequestService {
         itemRequestRepository.findById(id).orElseThrow(() -> new NotFoundException("item request not found"));
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
 
-        itemRequestDto = ItemRequestMapper.INSTANCE.ItemRequestToItemRequestDto(itemRequestRepository.findById(id).get());
+        itemRequestDto = ItemRequestMapper.INSTANCE.itemRequestToItemRequestDto(itemRequestRepository.findById(id).get());
 
         itemRequestDto.setItems(ItemMapper.INSTANCE
                 .sourceListToTargetList(itemRepository.findAll().stream()

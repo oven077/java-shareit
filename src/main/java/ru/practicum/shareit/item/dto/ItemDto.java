@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.dto;
 import lombok.Data;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.comment.CommentDto;
-import ru.practicum.shareit.request.model.ItemRequest;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -33,7 +32,6 @@ public class ItemDto {
     private BookingDto nextBooking;
 
     private int requestId;
-
 
 
 }

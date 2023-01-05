@@ -38,11 +38,9 @@ public class UserService {
 
     public UserDto getUser(int id) {
 
-        if (userRepository.findById(id).isPresent()) {
-            return UserMapper.INSTANCE.userToUserDto(userRepository.findById(id).get());
-        } else {
-            throw new NoSuchUserException("No User with such ID: " + id);
-        }
+        userRepository.findById(id).orElseThrow(() -> new NoSuchUserException("No User with such ID: " + id));
+
+        return UserMapper.INSTANCE.userToUserDto(userRepository.findById(id).get());
     }
 
 

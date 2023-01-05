@@ -54,8 +54,8 @@ public class ItemRequestController {
     public List<ItemRequestDto> getItemRequests(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
                                                 @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
                                                 @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
-        Sort sort = Sort.by(Sort.Direction.DESC,"created");
-        final Pageable pageable = PageRequest.of(page,pageSize,sort);
+        Sort sort = Sort.by(Sort.Direction.DESC, "created");
+        final Pageable pageable = PageRequest.of(page, pageSize, sort);
 
         log.info("controller:method userController -> getAllUsers");
 
@@ -66,11 +66,11 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public List<ItemRequestDto> getItemRequestsAllOther(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-                                                   @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
-                                                   @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
+                                                        @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
+                                                        @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
 
-        Sort sort = Sort.by(Sort.Direction.DESC,"created");
-        final Pageable pageable = PageRequest.of(page,pageSize,sort);
+        Sort sort = Sort.by(Sort.Direction.DESC, "created");
+        final Pageable pageable = PageRequest.of(page, pageSize, sort);
 
         log.info("controller:method userController -> getAllUsers");
 
