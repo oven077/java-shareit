@@ -1,6 +1,9 @@
 package ru.practicum.shareit.booking.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.mapper.BookingMapper;
@@ -24,17 +27,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
+@Validated
+
 public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
-
-    public BookingService(BookingRepository bookingRepository, UserRepository userRepository, ItemRepository itemRepository) {
-        this.bookingRepository = bookingRepository;
-        this.userRepository = userRepository;
-        this.itemRepository = itemRepository;
-    }
 
     public BookingDto createBooking(BookingDto bookingDto, int userId) {
 
@@ -137,39 +137,35 @@ public class BookingService {
                         .collect(Collectors.toList()));
     }
 
-    public List<BookingDto> getAll(int userId, String state) {
+    public List<BookingDto> getAll(int userId, String state, Pageable pageable) {
 
         List<Booking> result;
         User booker;
 
-
-        if (userRepository.findById(userId).isPresent()) {
-            booker = userRepository.findById(userId).get();
-        } else {
-            throw new NotFoundException("Not found booking with id: " + userId);
-        }
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Not found booking with id: " + userId));
+        booker = userRepository.findById(userId).get();
 
 
         State bookingState = Objects.isNull(state) ? State.ALL : State.of(state);
 
         switch (bookingState) {
             case ALL:
-                result = bookingRepository.findAllByBookerOrderByStartDesc(booker);
+                result = bookingRepository.findAllByBookerOrderByStartDesc(booker, pageable);
                 break;
             case CURRENT:
-                result = bookingRepository.findCurrentByBooker(booker, LocalDateTime.now());
+                result = bookingRepository.findCurrentByBooker(booker, LocalDateTime.now(), pageable);
                 break;
             case PAST:
-                result = bookingRepository.findPastByBooker(booker, LocalDateTime.now());
+                result = bookingRepository.findPastByBooker(booker, LocalDateTime.now(), pageable);
                 break;
             case FUTURE:
-                result = bookingRepository.findFutureByBooker(booker, LocalDateTime.now());
+                result = bookingRepository.findFutureByBooker(booker, LocalDateTime.now(), pageable);
                 break;
             case WAITING:
-                result = bookingRepository.findAllByBookerAndStatusOrderByStartDesc(booker, Status.WAITING);
+                result = bookingRepository.findAllByBookerAndStatusOrderByStartDesc(booker, Status.WAITING, pageable);
                 break;
             case REJECTED:
-                result = bookingRepository.findAllByBookerAndStatusOrderByStartDesc(booker, Status.REJECTED);
+                result = bookingRepository.findAllByBookerAndStatusOrderByStartDesc(booker, Status.REJECTED, pageable);
                 break;
 
             case UNKNOWN:
@@ -183,7 +179,7 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
-    public List<BookingDto> getOwnerItemsAll(int userId, String state) {
+    public List<BookingDto> getOwnerItemsAll(int userId, String state, Pageable pageable) {
 
         List<Booking> result;
         User owner;
@@ -198,22 +194,22 @@ public class BookingService {
 
         switch (bookingState) {
             case ALL:
-                result = bookingRepository.findAllByOwnerItems(owner);
+                result = bookingRepository.findAllByOwnerItems(owner, pageable);
                 break;
             case CURRENT:
-                result = bookingRepository.findCurrentByOwner(owner, LocalDateTime.now());
+                result = bookingRepository.findCurrentByOwner(owner, LocalDateTime.now(), pageable);
                 break;
             case PAST:
-                result = bookingRepository.findPastByOwner(owner, LocalDateTime.now());
+                result = bookingRepository.findPastByOwner(owner, LocalDateTime.now(), pageable);
                 break;
             case FUTURE:
-                result = bookingRepository.findFutureByOwner(owner, LocalDateTime.now());
+                result = bookingRepository.findFutureByOwner(owner, LocalDateTime.now(), pageable);
                 break;
             case WAITING:
-                result = bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(owner, Status.WAITING, LocalDateTime.now());
+                result = bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(owner, Status.WAITING, LocalDateTime.now(), pageable);
                 break;
             case REJECTED:
-                result = bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(owner, Status.REJECTED, LocalDateTime.now());
+                result = bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(owner, Status.REJECTED, LocalDateTime.now(), pageable);
                 break;
 
             case UNKNOWN:

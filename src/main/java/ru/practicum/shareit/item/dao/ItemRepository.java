@@ -18,6 +18,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     Optional<Item> findByItemAndOwnerId(@Param("id") Integer itemId, @Param("owner_id") Integer ownerId);
 
 
+    //не работает, просто для примера, со слов Янлдекса должно работать
     @Query(value = "select b.start_date, b.booker_id, b.item_id, b.end_date, b.id, b.status, i.name\n" +
             "\n" +
             "FROM bookings b\n" +

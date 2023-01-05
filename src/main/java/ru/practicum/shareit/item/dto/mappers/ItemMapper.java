@@ -17,6 +17,8 @@ public interface ItemMapper {
 
     ItemMapper INSTANCE = Mappers.getMapper(ItemMapper.class);
 
+    @Mapping(source = "request.id", target = "requestId")
+
     ItemDto itemToItemDto(Item item);
 
     Item itemDtoToItem(ItemDto itemDto);

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -17,6 +18,7 @@ import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.mappers.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -26,6 +28,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
+
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -33,33 +37,33 @@ public class ItemService {
     private final CommentRepository commentRepository;
     private final BookingRepository bookingRepository;
 
-    public ItemService(ItemRepository itemRepository, UserRepository userRepository, CommentRepository commentRepository, BookingRepository bookingRepository) {
-        this.itemRepository = itemRepository;
-        this.userRepository = userRepository;
-        this.commentRepository = commentRepository;
-        this.bookingRepository = bookingRepository;
-    }
+    private final ItemRequestRepository itemRequestRepository;
 
 
-    public ItemDto createItem(ItemDto item, int userId) {
+    public ItemDto createItem(ItemDto itemDto, int userId) {
         Item newItem;
-        if (userRepository.findById(userId).isPresent()) {
-            newItem = ItemMapper.INSTANCE.itemDtoToItem(item);
-            newItem.setOwner(userRepository.findById(userId).get());
-            return ItemMapper.INSTANCE.itemToItemDto(itemRepository.save(newItem));
-        } else {
-            throw new NotFoundException("No User with this ID: " + userId);
+
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No User with this ID: " + userId));
+
+        newItem = ItemMapper.INSTANCE.itemDtoToItem(itemDto);
+        newItem.setOwner(userRepository.findById(userId).get());
+
+
+        if (itemRequestRepository.findById(itemDto.getRequestId()).isPresent()) {
+            newItem.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).get());
         }
+
+
+        return ItemMapper.INSTANCE.itemToItemDto(itemRepository.save(newItem));
     }
 
     public ItemDto updateItem(ItemDto item, int itemId, int userId) {
 
-        if (itemRepository.findByItemAndOwnerId(itemId, userId).isPresent()) {
-            return ItemMapper.INSTANCE.itemToItemDto(itemRepository.save(ItemMapper.INSTANCE
-                    .updateItemFromDto(item, itemRepository.findById(itemId).get())));
-        } else {
-            throw new NotFoundException("No Item with this ID or wrong ID owner: " + userId);
-        }
+        itemRepository.findByItemAndOwnerId(itemId, userId).orElseThrow(() ->
+                new NotFoundException("No Item with this ID or wrong ID owner: " + userId));
+
+        return ItemMapper.INSTANCE.itemToItemDto(itemRepository.save(ItemMapper.INSTANCE
+                .updateItemFromDto(item, itemRepository.findById(itemId).get())));
     }
 
 

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exceptions.NoSuchUserException;
 import ru.practicum.shareit.user.dao.UserRepository;
@@ -11,14 +12,12 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
+
 public class UserService {
 
     private final UserRepository userRepository;
 
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public UserDto createUser(UserDto user) {
         return UserMapper.INSTANCE.userToUserDto(userRepository.save(UserMapper.INSTANCE.userDtoToUser(user)));
