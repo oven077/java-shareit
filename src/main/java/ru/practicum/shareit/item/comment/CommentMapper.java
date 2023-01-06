@@ -22,7 +22,6 @@ public interface CommentMapper {
 
     List<CommentDto> sourceListToTargetList(List<Comment> sourceList);
 
-
     @Mapping(target = "id", ignore = true)
     Comment updateCommentFromDto(CommentDto commentDto, @MappingTarget Comment comment);
 
