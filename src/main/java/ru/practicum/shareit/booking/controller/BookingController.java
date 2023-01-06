@@ -53,7 +53,7 @@ public class BookingController {
 
 
     @GetMapping()
-    public ResponseEntity<List<BookingDto>> getAll(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
+    public List<BookingDto> getAll(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
                                    @RequestParam(value = "state", required = false) String state,
                                    @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") @Min(0) int page,
                                    @Positive @RequestParam(value = "size", defaultValue = "10") @Min(0) int pageSize
@@ -63,7 +63,7 @@ public class BookingController {
         final Pageable pageable = PageRequest.of(page / pageSize, pageSize, sort);
 
         log.info("controller:method itemController -> getAllItems");
-        return ResponseEntity.ok(bookingService.getAll(userId, state, pageable));
+        return bookingService.getAll(userId, state, pageable);
     }
 
 
