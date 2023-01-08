@@ -20,7 +20,6 @@ import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -114,11 +113,9 @@ public class BookingService {
     public BookingDto getBooking(int bookingId, @Min(1) int userId) {
         Booking booking;
 
-        if (bookingRepository.findById(bookingId).isPresent()) {
-            booking = bookingRepository.findById(bookingId).get();
-        } else {
-            throw new NotFoundException("Not found booking with id: " + bookingId);
-        }
+        bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Not found booking with id: " + bookingId));
+
+        booking = bookingRepository.findById(bookingId).get();
 
         if (booking.getItem().getOwner().getId() != userId && booking.getBooker().getId() != userId) {
             throw new NotFoundException("Bad user booking: " + userId);
@@ -127,7 +124,7 @@ public class BookingService {
         return BookingMapper.INSTANCE.bookingToBookingDto(booking);
     }
 
-    public Collection<BookingDto> getAllBookings(int userId) {
+    public List<BookingDto> getAllBookings(int userId) {
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Not found user with id: " + userId));
 
@@ -184,11 +181,9 @@ public class BookingService {
         List<Booking> result;
         User owner;
 
-        if (userRepository.findById(userId).isPresent()) {
-            owner = userRepository.findById(userId).get();
-        } else {
-            throw new NotFoundException("Not found booking with id: " + userId);
-        }
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Not found booking with id: " + userId));
+        owner = userRepository.findById(userId).get();
+
 
         State bookingState = Objects.isNull(state) ? State.ALL : State.of(state);
 

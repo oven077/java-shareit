@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 
 @Entity
 @Data
+//@Builder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(schema = "public", name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
 public class User {

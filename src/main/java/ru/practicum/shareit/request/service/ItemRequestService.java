@@ -94,7 +94,7 @@ public class ItemRequestService {
         return itemRequestDtoList;
     }
 
-    public ItemRequestDto getItemRequestDtoById(int id, int userId) {
+    public ItemRequestDto getItemRequestById(int id, int userId) {
 
 
         ItemRequestDto itemRequestDto;

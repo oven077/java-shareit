@@ -29,4 +29,46 @@ class UserControllerTest {
         Assert.assertEquals(HttpStatus.OK, responce.getStatusCode());
 
     }
+
+
+    @Test
+    void getUser() {
+        int userId = 0;
+
+        ResponseEntity<UserDto> responce = userController.getUser(userId);
+
+        Assert.assertEquals(HttpStatus.OK, responce.getStatusCode());
+
+    }
+
+    @Test
+    void deleteUser() {
+        int userId = 0;
+
+        ResponseEntity<HttpStatus> responce = userController.deleteUser(userId);
+
+        Assert.assertEquals(HttpStatus.OK, responce.getStatusCode());
+
+    }
+
+    @Test
+    void createUser() {
+        UserDto userDto = new UserDto();
+
+        ResponseEntity<UserDto> responce = userController.createUser(userDto);
+
+        Assert.assertEquals(HttpStatus.OK, responce.getStatusCode());
+
+    }
+
+    @Test
+    void updateUser() {
+        int userId = 0;
+        UserDto userDto = new UserDto();
+
+        ResponseEntity<UserDto> responce = userController.updateUser(userId, userDto);
+        Assert.assertEquals(HttpStatus.OK, responce.getStatusCode());
+    }
 }
+
+

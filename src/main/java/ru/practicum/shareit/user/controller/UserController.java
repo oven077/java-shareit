@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -23,26 +24,26 @@ public class UserController {
 
 
     @PostMapping()
-    public UserDto createUser(@Valid @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
         log.info("controller:method userController -> createUser");
 
-        return userService.createUser(user);
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable int id, @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable int id, @RequestBody UserDto user) {
         log.info("controller:method userController -> updateUser");
 
-        return userService.updateUser(user, id);
+        return ResponseEntity.ok(userService.updateUser(user, id));
     }
 
 
     @GetMapping("/{id}")
-    public UserDto getUser(@PathVariable int id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable int id) {
         log.info("controller:method userController -> getUser");
 
-        return userService.getUser(id);
+        return ResponseEntity.ok(userService.getUser(id));
     }
 
 
@@ -55,8 +56,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable int id) {
         log.info("controller:method userController -> deleteUser");
-        userService.deleteUser(id);
+        return ResponseEntity.ok(userService.deleteUser(id));
     }
 }

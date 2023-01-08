@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.comment.CommentDto;
@@ -25,55 +26,55 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping()
-    public ItemDto createItem(@Valid @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId
+    public ResponseEntity<ItemDto> createItem(@Valid @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId
     ) {
         log.info("controller:method itemController -> createItem");
 
-        return itemService.createItem(item, userId);
+        return ResponseEntity.ok(itemService.createItem(item, userId));
     }
 
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@PathVariable int itemId, @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<ItemDto> updateItem(@PathVariable int itemId, @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> updateItem");
 
-        return itemService.updateItem(item, itemId, userId);
+        return ResponseEntity.ok(itemService.updateItem(item, itemId, userId));
 
 
     }
 
 
     @GetMapping("/{itemId}")
-    public ItemDto getItemById(@PathVariable int itemId,
-                               @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<ItemDto> getItemById(@PathVariable int itemId,
+                                               @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getItemById");
 
-        return itemService.getItemBookings(itemId, userId);
+        return ResponseEntity.ok(itemService.getItemBookings(itemId, userId));
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addCommentByItemId(@PathVariable int itemId,
-                                         @RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-                                         @RequestBody @Valid CommentDto commentDto) {
+    public ResponseEntity<CommentDto> addCommentByItemId(@PathVariable int itemId,
+                                                         @RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
+                                                         @RequestBody @Valid CommentDto commentDto) {
         log.info("controller:method itemController -> getItemById");
 
-        return itemService.addCommentByItemId(itemId, userId, commentDto);
+        return ResponseEntity.ok(itemService.addCommentByItemId(itemId, userId, commentDto));
     }
 
 
     @GetMapping()
-    public Collection<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<Collection<ItemDto>> getAllItems(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getAllItems");
 
-        return itemService.getAllItems(userId);
+        return ResponseEntity.ok(itemService.getAllItems(userId));
     }
 
     @GetMapping("/search")
     @Validated
-    public Collection<ItemDto> getAllItemsWithSearch(@Valid @RequestParam(defaultValue = "///") String text,
-                                                     @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<Collection<ItemDto>> getAllItemsWithSearch(@Valid @RequestParam(defaultValue = "///") String text,
+                                                                     @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getAllItemsWithSearch");
 
-        return itemService.getAllItemsWithSearch(userId, text);
+        return ResponseEntity.ok(itemService.getAllItemsWithSearch(userId, text));
     }
 }
