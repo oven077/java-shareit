@@ -24,6 +24,7 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,7 +81,7 @@ public class ItemService {
         itemDtoList = ItemMapper.INSTANCE
                 .sourceListToTargetList(itemRepository.findAll().stream()
                         .filter(p -> p.getOwner().getId() == userId)
-                        .sorted((p1, p2) -> p1.getId() - p2.getId())
+                        .sorted(Comparator.comparingInt(Item::getId))
                         .collect(Collectors.toList()));
 
 

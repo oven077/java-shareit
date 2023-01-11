@@ -19,5 +19,7 @@ public interface ItemRequestMapper {
 
     List<ItemRequestDto> sourceListToTargetList(List<ItemRequest> sourceList);
 
+    List<ItemRequest> targetListToSourceList(List<ItemRequestDto> sourceList);
+
 
 }

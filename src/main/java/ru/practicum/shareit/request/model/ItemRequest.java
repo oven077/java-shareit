@@ -20,6 +20,8 @@ public class ItemRequest {
     @Id
     @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "requests_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id")
     public int id;
     public String description;

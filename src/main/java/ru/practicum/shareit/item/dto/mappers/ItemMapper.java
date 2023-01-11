@@ -24,6 +24,8 @@ public interface ItemMapper {
 
     List<ItemDto> sourceListToTargetList(List<Item> sourceList);
 
+    List<Item> targetListToSourceList(List<ItemDto> sourceList);
+
 
     @Mapping(target = "id", ignore = true)
     Item updateItemFromDto(ItemDto itemDto, @MappingTarget Item item);
