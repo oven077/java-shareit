@@ -14,6 +14,8 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.mapper.BookingMapper;
 import ru.practicum.shareit.booking.enums.Status;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.exceptions.BadRequestException;
+import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.UnsupportedState;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
@@ -78,6 +80,175 @@ class BookingServiceTest {
         Mockito.verify(bookingRepository).save(any());
 
     }
+
+
+    @Test
+    void createBooking_NotAvailable() {
+
+        Item item = new Item();
+        User owner = new User();
+        User user = new User();
+        BookingDto bookingDto = BookingDto.builder().build();
+
+
+        owner.setId(12);
+        int userId = 0;
+        int itemId = 0;
+        Booking bookingToSave = new Booking();
+
+        bookingToSave.setStart(LocalDateTime.now().plusSeconds(120));
+        bookingToSave.setEnd(LocalDateTime.now().plusSeconds(240));
+        bookingToSave.setId(1);
+
+        item.setAvailable(false);
+        item.setOwner(owner);
+        item.setId(itemId);
+
+        bookingToSave.setItem(item);
+
+        Mockito.when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
+
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
+            bookingService.createBooking(bookingDto, userId);
+        });
+
+        assertEquals("Item is not available: " + itemId, thrown.getMessage());
+    }
+
+    @Test
+    void createBooking_OwnerBookSelfItem() {
+
+        Item item = new Item();
+        User owner = new User();
+        User user = new User();
+        BookingDto bookingDto = BookingDto.builder().build();
+
+
+        owner.setId(12);
+        int userId = 0;
+        int itemId = 0;
+        owner.setId(userId);
+        Booking bookingToSave = new Booking();
+
+        bookingToSave.setStart(LocalDateTime.now().plusSeconds(120));
+        bookingToSave.setEnd(LocalDateTime.now().plusSeconds(240));
+        bookingToSave.setId(1);
+
+        item.setAvailable(true);
+        item.setOwner(owner);
+        item.setId(itemId);
+
+        bookingToSave.setItem(item);
+
+        Mockito.when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
+
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            bookingService.createBooking(bookingDto, userId);
+        });
+
+        assertEquals("Owner can not book self item", thrown.getMessage());
+    }
+
+    @Test
+    void createBooking_UserNotFound() {
+
+        Item item = new Item();
+        User owner = new User();
+        User user = new User();
+        BookingDto bookingDto = BookingDto.builder().build();
+
+
+        owner.setId(12);
+        int userId = 0;
+        int itemId = 0;
+        Booking bookingToSave = new Booking();
+
+        bookingToSave.setStart(LocalDateTime.now().plusSeconds(120));
+        bookingToSave.setEnd(LocalDateTime.now().plusSeconds(240));
+        bookingToSave.setId(1);
+
+        item.setAvailable(true);
+        item.setOwner(owner);
+        item.setId(itemId);
+
+        bookingToSave.setItem(item);
+
+        Mockito.when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
+
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            bookingService.createBooking(bookingDto, userId);
+        });
+        assertEquals("User not found: " + userId, thrown.getMessage());
+    }
+
+    @Test
+    void createBooking_EndBeforeStart() {
+
+        Item item = new Item();
+        User owner = new User();
+        User user = new User();
+        BookingDto bookingDto = BookingDto.builder().build();
+
+
+        owner.setId(12);
+        int userId = 0;
+        int itemId = 0;
+        Booking bookingToSave = new Booking();
+
+        bookingDto.setStart(LocalDateTime.now().plusSeconds(120));
+        bookingDto.setEnd(LocalDateTime.now().minusSeconds(120));
+        bookingToSave.setId(1);
+
+        item.setAvailable(true);
+        item.setOwner(owner);
+        item.setId(itemId);
+
+        bookingToSave.setItem(item);
+
+        Mockito.when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
+            bookingService.createBooking(bookingDto, userId);
+        });
+        assertEquals("End time has to be after start time", thrown.getMessage());
+    }
+
+    @Test
+    void createBooking_StartEndTimeAfterCurrent() {
+
+        Item item = new Item();
+        User owner = new User();
+        User user = new User();
+        BookingDto bookingDto = BookingDto.builder().build();
+
+
+        owner.setId(12);
+        int userId = 0;
+        int itemId = 0;
+        Booking bookingToSave = new Booking();
+
+        bookingDto.setStart(LocalDateTime.now().minusSeconds(120));
+        bookingDto.setEnd(LocalDateTime.now().minusSeconds(80));
+        bookingToSave.setId(1);
+
+        item.setAvailable(true);
+        item.setOwner(owner);
+        item.setId(itemId);
+
+        bookingToSave.setItem(item);
+
+        Mockito.when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
+            bookingService.createBooking(bookingDto, userId);
+        });
+        assertEquals("Start time and end time has to be after current time", thrown.getMessage());
+    }
+
 
     @Test
     void setApproveOrRejectBooking() {

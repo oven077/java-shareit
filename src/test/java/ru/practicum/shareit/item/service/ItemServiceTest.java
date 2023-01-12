@@ -1,131 +1,186 @@
 package ru.practicum.shareit.item.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.shareit.booking.dao.BookingRepository;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.enums.Status;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.mappers.ItemMapper;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
-import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.mappers.UserMapper;
+import ru.practicum.shareit.user.service.UserService;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.Collection;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(properties = "db.name=test",
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase
+@ActiveProfiles("test")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@AutoConfigureMockMvc
 class ItemServiceTest {
 
-    @Mock
+    @Autowired
     private ItemRequestRepository itemRequestRepository;
 
-    @Mock
+    @Autowired
     private UserRepository userRepository;
 
-    @Mock
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
     private ItemRepository itemRepository;
 
-    @InjectMocks
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private BookingService bookingService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
     private ItemService itemService;
 
+    @BeforeEach
+    private void addUsers() {
 
-    @Test
-    void createItem() {
-        int userId = 0;
-        int itemRequestId = 0;
-        Item item = new Item();
+        userService.createUser(UserDto.builder()
+                .name("user1")
+                .email("user1@user.ru")
+                .build());
 
-        User user = new User();
-        ItemDto expectedItemDto = new ItemDto();
+        userService.createUser(UserDto.builder()
+                .name("user2")
+                .email("user2@user.ru")
+                .build());
 
-        ItemRequest itemRequest = new ItemRequest();
+        userService.createUser(UserDto.builder()
+                .name("user3")
+                .email("user3@user.ru")
+                .build());
 
-        Mockito.when(itemRepository.save(any(Item.class))).thenReturn(item);
-        Mockito.when(itemRequestRepository.findById(itemRequestId)).thenReturn(Optional.of(itemRequest));
-        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        itemService.createItem(ItemDto.builder()
+                .name("item1")
+                .available(true)
+                .description("item 1 description")
+                .build(), 1);
+        itemService.createItem(ItemDto.builder()
+                .name("item2")
+                .description("test")
+                .available(true)
+                .description("item 1 description")
+                .build(), 2);
 
-        ItemDto actualItemDto = itemService.createItem(expectedItemDto, userId);
+        Booking booking = new Booking();
+        booking.setBooker(userRepository.findById(2).get());
+        booking.setItem(itemRepository.findById(1).get());
+        booking.setStatus(Status.WAITING);
+        booking.setStart(LocalDateTime.now().minusDays(1));
+        booking.setEnd(LocalDateTime.now().minusSeconds(240));
 
-
-        Assert.assertEquals(expectedItemDto, actualItemDto);
-        Mockito.verify(itemRequestRepository, Mockito.times(2)).findById(itemRequestId);
+        bookingRepository.save(booking);
     }
 
+
+    @Transactional
     @Test
+    @Sql(value = {"/delete_ALL.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void getAllItems() {
+
+        bookingService.createBooking(BookingDto.builder()
+                .booker(UserMapper.INSTANCE.userDtoToUser(userService.getUser(2)))
+                .item(ItemMapper.INSTANCE.itemDtoToItem(itemService.getItemBookings(1, 1)))
+                .itemId(1)
+                .start(LocalDateTime.now().plusSeconds(120))
+                .end(LocalDateTime.now().plusSeconds(240))
+                .build(), 2);
+
+        itemService.getAllItems(1);
+
+        assertThat(userService.getUser(1), notNullValue());
+        assertThat(itemService.getAllItems(1), notNullValue());
+
+        Assert.assertEquals(itemService.getAllItems(1).size(), 1);
+    }
+
+
+    @Transactional
+    @Test
+    @Sql(value = {"/delete_ALL.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void getItemBookings() {
+
+        assertThat(userService.getUser(1), notNullValue());
+        assertThat(itemService.getItemBookings(1, 2), notNullValue());
+        Assert.assertEquals(itemService.getItemBookings(1, 2).getId(), 1);
+    }
+
+    @Transactional
+    @Test
+    @Sql(value = {"/delete_ALL.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void addCommentByItemId() {
+        CommentDto commentDto = CommentDto.builder()
+                .text("test")
+                .build();
+
+        Assert.assertEquals(commentDto.getText(), itemService.addCommentByItemId(1, 2, commentDto).getText());
+    }
+
+
+    @Transactional
+    @Test
+    @Sql(value = {"/delete_ALL.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateItem() {
-        int userId = 0;
-        int itemId = 0;
-        Item item = new Item();
+        int userId = 1;
+        int itemId = 1;
 
-        ItemDto expectedItemDto = new ItemDto();
-
-        Mockito.when(itemRepository.findByItemAndOwnerId(itemId, userId)).thenReturn(Optional.of(item));
-        Mockito.when(itemRepository.save(any(Item.class))).thenReturn(item);
-        Mockito.when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
+        ItemDto expectedItemDto = ItemDto.builder()
+                .id(1)
+                .build();
 
         ItemDto actualItemDto = itemService.updateItem(expectedItemDto, itemId, userId);
 
-
-        Assert.assertEquals(expectedItemDto, actualItemDto);
+        Assert.assertEquals(expectedItemDto.getId(), actualItemDto.getId());
     }
 
+
+    @Transactional
     @Test
-    @Ignore
-    void getAllItems() {
-
-        int userId = 0;
-        int itemId = 0;
-        Item item = new Item();
-        ItemDto itemDto = new ItemDto();
-
-        List<Booking> listBooking = new ArrayList<>();
-
-
-        Collection<ItemDto> expectedListItemDto = new ArrayList<>();
-        List<ItemDto> itemDtoList = new ArrayList<>();
-
-        itemDtoList.add(itemDto);
-
-
-        Mockito.when(ItemMapper.INSTANCE
-                .sourceListToTargetList(itemRepository.findAll().stream()
-                        .filter(p -> p.getOwner().getId() == userId)
-                        .sorted(Comparator.comparingInt(Item::getId))
-                        .collect(Collectors.toList()))).thenReturn(any());
-
-        Mockito.when(itemRepository.findListBooking(itemId, userId)).thenReturn(listBooking);
-//        Mockito.when(itemRepository.findByItemAndOwnerId(itemId, userId)).thenReturn(Optional.of(item));
-//        Mockito.when(itemRepository.save(any(Item.class))).thenReturn(item);
-//        Mockito.when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
-
-        Collection<ItemDto> actualListItemDto = itemService.getAllItems(userId);
-
-
-        Assert.assertEquals(expectedListItemDto.size(), actualListItemDto.size());
-    }
-
-    @Test
-    @Ignore
+    @Sql(value = {"/delete_ALL.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getAllItemsWithSearch() {
+
+        Collection<ItemDto> itemDtos = itemService.getAllItemsWithSearch(0, "test");
+
+
+        Assert.assertEquals(0, itemDtos.size());
     }
 
-    @Test
-    @Ignore
-    void getItemBookings() {
-    }
 
-    @Test
-    @Ignore
-    void addCommentByItemId() {
-    }
 }

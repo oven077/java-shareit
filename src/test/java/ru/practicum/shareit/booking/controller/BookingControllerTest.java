@@ -33,7 +33,7 @@ class BookingControllerTest {
     void setApproveOrRejectBooking() {
         int userId = 0;
         int bookingId = 0;
-        BookingDto bookingDto = new BookingDto();
+        BookingDto bookingDto = BookingDto.builder().build();
 
         Mockito.when(bookingService.setApproveOrRejectBooking(bookingId, true, userId)).thenReturn(bookingDto);
         ResponseEntity<BookingDto> responce = bookingController.setApproveOrRejectBooking(bookingId, true, userId);
@@ -45,7 +45,7 @@ class BookingControllerTest {
     @Test
     void createBooking() {
         int userId = 0;
-        BookingDto bookingDto = new BookingDto();
+        BookingDto bookingDto = BookingDto.builder().build();
 
         Mockito.when(bookingService.createBooking(bookingDto, userId)).thenReturn(bookingDto);
         ResponseEntity<BookingDto> responce = bookingController.createBooking(bookingDto, userId);
@@ -56,7 +56,7 @@ class BookingControllerTest {
     void getBooking() {
         int userId = 0;
         int bookingId = 0;
-        BookingDto bookingDto = new BookingDto();
+        BookingDto bookingDto = BookingDto.builder().build();
 
         Mockito.when(bookingService.getBooking(bookingId, userId)).thenReturn(bookingDto);
         ResponseEntity<BookingDto> responce = bookingController.getBooking(bookingId, userId);

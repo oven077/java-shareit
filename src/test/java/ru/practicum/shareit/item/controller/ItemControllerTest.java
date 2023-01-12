@@ -42,7 +42,7 @@ class ItemControllerTest {
     @Test
     void createItem() {
         int userId = 0;
-        ItemDto itemDto = new ItemDto();
+        ItemDto itemDto = ItemDto.builder().build();
 
         Mockito.when(itemService.createItem(itemDto, userId)).thenReturn(itemDto);
         ResponseEntity<ItemDto> responce = itemController.createItem(itemDto, userId);
@@ -54,7 +54,7 @@ class ItemControllerTest {
     void updateItem() {
         int userId = 0;
         int itemId = 0;
-        ItemDto itemDto = new ItemDto();
+        ItemDto itemDto = ItemDto.builder().build();
 
         Mockito.when(itemService.updateItem(itemDto, itemId, userId)).thenReturn(itemDto);
         ResponseEntity<ItemDto> responce = itemController.updateItem(itemId, itemDto, userId);
@@ -74,7 +74,7 @@ class ItemControllerTest {
     void addCommentByItemId() {
         int userId = 0;
         int itemId = 0;
-        CommentDto commentDto = new CommentDto();
+        CommentDto commentDto = CommentDto.builder().build();
 
 
         ResponseEntity<CommentDto> responce = itemController.addCommentByItemId(itemId, userId, commentDto);

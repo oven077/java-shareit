@@ -130,11 +130,7 @@ public class ItemService {
         BookingDto bookingDto;
         Booking booking;
 
-        if (itemRepository.findById(itemId).isPresent()) {
-            item = itemRepository.findById(itemId).get();
-        } else {
-            throw new NoSuchUserException("No Item with such ID: " + itemId);
-        }
+        itemRepository.findById(itemId).orElseThrow(() -> new NoSuchUserException("No Item with such ID: " + itemId));
 
         itemDto = ItemMapper.INSTANCE.itemToItemDto(itemRepository.findById(itemId).get());
 
@@ -170,18 +166,12 @@ public class ItemService {
         Item item;
         User user;
         Comment comment;
-        if (itemRepository.findById(itemId).isPresent()) {
-            item = itemRepository.findById(itemId).get();
-        } else {
-            throw new NotFoundException("No Item with this ID or wrong ID owner: " + userId);
-        }
 
-        if (userRepository.findById(userId).isPresent()) {
-            user = userRepository.findById(userId).get();
-        } else {
-            throw new NotFoundException("No Item with this ID or wrong ID owner: " + userId);
-        }
+        itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("No Item with this ID or wrong ID owner: " + userId));
+        item = itemRepository.findById(itemId).get();
 
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No Item with this ID or wrong ID owner: " + userId));
+        user = userRepository.findById(userId).get();
 
         if (bookingRepository.findBookingWithUserAndItem(userId, itemId, Status.REJECTED, LocalDateTime.now()).isEmpty()) {
             throw new BadRequestException("Do not have bookings with user: " + userId);

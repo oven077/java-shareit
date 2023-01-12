@@ -54,7 +54,7 @@ class UserControllerIT {
     @Test
     void getUser() {
         int userId = 0;
-        UserDto userActual = new UserDto();
+        UserDto userActual = UserDto.builder().build();
         userActual.setId(1);
         userActual.setName("asd");
         userActual.setEmail("asd@asd.ru");

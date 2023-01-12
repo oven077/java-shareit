@@ -63,10 +63,6 @@ public class BookingService {
             throw new NotFoundException("User not found: " + userId);
         }
 
-        if (item.get().getOwner().getId() == userId) {
-            throw new BadRequestException("Could not find user: " + userId);
-        }
-
         if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
             throw new BadRequestException("End time has to be after start time");
         }

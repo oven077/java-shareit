@@ -46,10 +46,6 @@ public class ItemRequestService {
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
 
-//        itemRequestDtoList = ItemRequestMapper.INSTANCE.
-//                sourceListToTargetList(itemRequestRepository.findAll(pageable).toList());
-
-
         itemRequestDtoList = ItemRequestMapper.INSTANCE
                 .sourceListToTargetList(itemRequestRepository.findAll());
 

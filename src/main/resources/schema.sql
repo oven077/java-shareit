@@ -6,7 +6,6 @@
 -- DROP TABLE bookings;
 
 
-
 CREATE TYPE booking_state as enum ('WAITING', 'APPROVED', 'REJECTED','CANCELED');
 
 

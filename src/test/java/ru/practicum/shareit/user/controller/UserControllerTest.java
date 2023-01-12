@@ -53,7 +53,7 @@ class UserControllerTest {
 
     @Test
     void createUser() {
-        UserDto userDto = new UserDto();
+        UserDto userDto = UserDto.builder().build();
 
         ResponseEntity<UserDto> responce = userController.createUser(userDto);
 
@@ -64,7 +64,7 @@ class UserControllerTest {
     @Test
     void updateUser() {
         int userId = 0;
-        UserDto userDto = new UserDto();
+        UserDto userDto = UserDto.builder().build();
 
         ResponseEntity<UserDto> responce = userController.updateUser(userId, userDto);
         Assert.assertEquals(HttpStatus.OK, responce.getStatusCode());
