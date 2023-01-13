@@ -34,7 +34,6 @@ public class ItemRequestService {
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
         itemRequest = ItemRequestMapper.INSTANCE.itemRequestDtoToItemRequest(itemRequestDto);
-//        itemRequest.setRequestor(userRepository.findById(userId).get());
         itemRequest.setRequestor(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found")));
         itemRequest.setCreated(LocalDateTime.now());
 
