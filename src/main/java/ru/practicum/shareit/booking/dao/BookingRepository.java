@@ -14,11 +14,6 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> findAllByBookerOrderByStartDesc(User booker, Pageable pageable);
-//    List<Booking> findAllByBooker(User booker, Pageable pageable);
-
-//    @Query(value = "select b from Booking b where b.booker = :booker order by b.start desc ")
-//    List<Booking> findAllByBooker(@Param("booker") User booker, Pageable pageable);
-
 
     @Query(value = "select b from Booking b " +
             "where b.booker = :booker and :now between b.start and b.end order by b.start desc ")

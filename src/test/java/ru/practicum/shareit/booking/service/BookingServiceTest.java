@@ -379,7 +379,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findAllByBookerOrderByStartDesc(user, pageable)).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getAll(userId, "ALL", pageable);
+        List<BookingDto> actualBookingList = bookingService.getAll(userId, "ALL", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
     }
@@ -413,7 +413,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findCurrentByBooker(any(User.class), any(LocalDateTime.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getAll(userId, "CURRENT", pageable);
+        List<BookingDto> actualBookingList = bookingService.getAll(userId, "CURRENT", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -448,7 +448,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findPastByBooker(any(User.class), any(LocalDateTime.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getAll(userId, "PAST", pageable);
+        List<BookingDto> actualBookingList = bookingService.getAll(userId, "PAST", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -483,7 +483,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findFutureByBooker(any(User.class), any(LocalDateTime.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getAll(userId, "FUTURE", pageable);
+        List<BookingDto> actualBookingList = bookingService.getAll(userId, "FUTURE", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -519,7 +519,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findAllByBookerAndStatusOrderByStartDesc(any(User.class), any(Status.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getAll(userId, "WAITING", pageable);
+        List<BookingDto> actualBookingList = bookingService.getAll(userId, "WAITING", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -557,7 +557,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findAllByBookerAndStatusOrderByStartDesc(any(User.class), any(Status.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getAll(userId, "REJECTED", pageable);
+        List<BookingDto> actualBookingList = bookingService.getAll(userId, "REJECTED", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -596,7 +596,7 @@ class BookingServiceTest {
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
         UnsupportedState thrown = assertThrows(UnsupportedState.class, () -> {
-            bookingService.getAll(userId, "UNKNOWN", pageable);
+            bookingService.getAll(userId, "UNKNOWN", 0, 10);
         });
 
         assertEquals("Unknown state: UNSUPPORTED_STATUS", thrown.getMessage());
@@ -633,7 +633,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findAllByOwnerItems(user, pageable)).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "ALL", pageable);
+        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "ALL", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
     }
@@ -667,7 +667,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findCurrentByOwner(any(User.class), any(LocalDateTime.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "CURRENT", pageable);
+        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "CURRENT", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -703,7 +703,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findPastByOwner(any(User.class), any(LocalDateTime.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "PAST", pageable);
+        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "PAST", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -738,7 +738,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findFutureByOwner(any(User.class), any(LocalDateTime.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "FUTURE", pageable);
+        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "FUTURE", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -774,7 +774,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(any(User.class), any(Status.class), any(LocalDateTime.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "WAITING", pageable);
+        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "WAITING", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -813,7 +813,7 @@ class BookingServiceTest {
         Mockito.when(bookingRepository.findAllByOwnerAndStatusOrderByStartDesc(any(User.class), any(Status.class), any(LocalDateTime.class), any(Pageable.class))).thenReturn(bookingListExpected);
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "REJECTED", pageable);
+        List<BookingDto> actualBookingList = bookingService.getOwnerItemsAll(userId, "REJECTED", 0, 10);
 
         assertEquals(BookingMapper.INSTANCE.sourceListToTargetList(bookingListExpected), actualBookingList);
 
@@ -851,7 +851,7 @@ class BookingServiceTest {
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
         UnsupportedState thrown = assertThrows(UnsupportedState.class, () -> {
-            bookingService.getOwnerItemsAll(userId, "UNKNOWN", pageable);
+            bookingService.getOwnerItemsAll(userId, "UNKNOWN", 0, 10);
         });
 
         assertEquals("Unknown state: UNSUPPORTED_STATUS", thrown.getMessage());

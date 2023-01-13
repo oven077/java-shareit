@@ -2,9 +2,6 @@ package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -59,11 +56,8 @@ public class BookingController {
                                                    @Positive @RequestParam(value = "size", defaultValue = "10") @Min(0) int pageSize
     ) {
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "start");
-        final Pageable pageable = PageRequest.of(page / pageSize, pageSize, sort);
-
         log.info("controller:method itemController -> getAllItems");
-        return ResponseEntity.ok(bookingService.getAll(userId, state, pageable));
+        return ResponseEntity.ok(bookingService.getAll(userId, state, page, pageSize));
     }
 
 
@@ -73,10 +67,8 @@ public class BookingController {
                                                              @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
                                                              @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "start");
-        final Pageable pageable = PageRequest.of(page, pageSize, sort);
 
         log.info("controller:method itemController -> getAllItems");
-        return ResponseEntity.ok(bookingService.getOwnerItemsAll(userId, state, pageable));
+        return ResponseEntity.ok(bookingService.getOwnerItemsAll(userId, state, page, pageSize));
     }
 }

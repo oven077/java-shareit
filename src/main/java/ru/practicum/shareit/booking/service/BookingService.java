@@ -1,7 +1,9 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.dao.BookingRepository;
@@ -22,7 +24,6 @@ import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,29 +36,21 @@ public class BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
-    public BookingDto createBooking(BookingDto bookingDto, int userId) {
 
-        Optional<Item> item;
+    private void checkBooking(BookingDto bookingDto, int userId, Item item) {
         Boolean isAvailable;
         int itemId;
-
-
-        itemRepository.findById(bookingDto.getItemId()).orElseThrow(() -> new NotFoundException("Not found item with id: " + bookingDto.getId()));
-
-        item = itemRepository.findById(bookingDto.getItemId());
-
-        itemId = item.get().getId();
-        isAvailable = item.get().getAvailable();
+        itemId = item.getId();
+        isAvailable = item.getAvailable();
 
 
         if (!isAvailable) {
             throw new BadRequestException("Item is not available: " + itemId);
         }
 
-        if (item.get().getOwner().getId() == userId) {
+        if (item.getOwner().getId() == userId) {
             throw new NotFoundException("Owner can not book self item");
         }
-
 
         if (!userRepository.findById(userId).isPresent()) {
             throw new NotFoundException("User not found: " + userId);
@@ -72,6 +65,16 @@ public class BookingService {
             throw new BadRequestException("Start time and end time has to be after current time");
         }
 
+
+    }
+
+    public BookingDto createBooking(BookingDto bookingDto, int userId) {
+
+        Item item = itemRepository.findById(bookingDto.getItemId())
+                .orElseThrow(() -> new NotFoundException("Not found item with id: " + bookingDto.getId()));
+        int itemId = item.getId();
+
+        checkBooking(bookingDto, userId, item);
         bookingDto.setStatus(Status.WAITING);
         bookingDto.setBooker(userRepository.findById(userId).get());
         bookingDto.setItem(itemRepository.findById(itemId).get());
@@ -82,11 +85,9 @@ public class BookingService {
 
     public BookingDto setApproveOrRejectBooking(int bookingId, Boolean approve, int userId) {
 
-        Booking booking;
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Not found booking with id: " + bookingId));
 
-        bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Not found booking with id: " + bookingId));
-
-        booking = bookingRepository.findById(bookingId).get();
 
         if (booking.getItem().getOwner().getId() != userId) {
             throw new NotFoundException("only owner of item can make approve");
@@ -130,10 +131,13 @@ public class BookingService {
                         .collect(Collectors.toList()));
     }
 
-    public List<BookingDto> getAll(int userId, String state, Pageable pageable) {
+    public List<BookingDto> getAll(int userId, String state, int page, int pageSize) {
 
         List<Booking> result;
         User booker;
+        Sort sort = Sort.by(Sort.Direction.DESC, "start");
+        final Pageable pageable = PageRequest.of(page / pageSize, pageSize, sort);
+
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Not found booking with id: " + userId));
         booker = userRepository.findById(userId).get();
@@ -172,10 +176,13 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
-    public List<BookingDto> getOwnerItemsAll(int userId, String state, Pageable pageable) {
+    public List<BookingDto> getOwnerItemsAll(int userId, String state, int page, int pageSize) {
 
         List<Booking> result;
         User owner;
+        Sort sort = Sort.by(Sort.Direction.DESC, "start");
+        final Pageable pageable = PageRequest.of(page, pageSize, sort);
+
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Not found booking with id: " + userId));
         owner = userRepository.findById(userId).get();

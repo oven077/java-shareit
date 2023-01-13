@@ -21,7 +21,6 @@ public class Booking {
     @Id
     @SequenceGenerator(name = "pk_sequence", schema = "public", sequenceName = "booking_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "id")
     private int id;

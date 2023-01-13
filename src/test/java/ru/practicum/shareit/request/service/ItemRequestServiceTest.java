@@ -76,7 +76,7 @@ class ItemRequestServiceTest {
                 .targetListToSourceList(itemRequestDtoListExpected));
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        List<ItemRequestDto> actualItemRequestListDto = itemRequestService.getItemRequests(userId, pageable);
+        List<ItemRequestDto> actualItemRequestListDto = itemRequestService.getItemRequests(userId, 0, 10);
 
         Assert.assertEquals(itemRequestDtoListExpected, actualItemRequestListDto);
         Mockito.verify(itemRequestRepository).findAll();
@@ -96,15 +96,15 @@ class ItemRequestServiceTest {
 
         itemRequestDtoListExpected.add(itemRequestDtoToSave);
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "start");
-        final Pageable pageable = PageRequest.of(0, 10);
+        Sort sort = Sort.by(Sort.Direction.DESC, "created");
+        final Pageable pageable = PageRequest.of(0, 10, sort);
 
         Mockito.when(itemRepository.findAll()).thenReturn(ItemMapper.INSTANCE.targetListToSourceList(itemListDto));
         Mockito.when(itemRequestRepository.findAllOtherItemRequests(itemId, pageable)).thenReturn(ItemRequestMapper
                 .INSTANCE.targetListToSourceList(itemRequestDtoListExpected));
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        List<ItemRequestDto> actualItemRequestListDto = itemRequestService.getItemRequestsAllOther(userId, pageable);
+        List<ItemRequestDto> actualItemRequestListDto = itemRequestService.getItemRequestsAllOther(userId, 0, 10);
 
         Assert.assertEquals(itemRequestDtoListExpected.size(), actualItemRequestListDto.size());
         Mockito.verify(itemRequestRepository).findAllOtherItemRequests(itemId, pageable);

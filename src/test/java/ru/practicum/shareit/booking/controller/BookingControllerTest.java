@@ -6,9 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -68,11 +65,8 @@ class BookingControllerTest {
         int userId = 0;
         List<BookingDto> bookingDtoList = new ArrayList<>();
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "start");
-        final Pageable pageable = PageRequest.of(0, 10, sort);
 
-
-        Mockito.when(bookingService.getAll(userId, "state", pageable)).thenReturn(bookingDtoList);
+        Mockito.when(bookingService.getAll(userId, "state", 0, 10)).thenReturn(bookingDtoList);
         ResponseEntity<List<BookingDto>> responce = bookingController.getAll(userId, "state", 0, 10);
         assertEquals(HttpStatus.OK, responce.getStatusCode());
     }
@@ -82,11 +76,8 @@ class BookingControllerTest {
         int userId = 0;
         List<BookingDto> bookingDtoList = new ArrayList<>();
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "start");
-        final Pageable pageable = PageRequest.of(0, 10, sort);
 
-
-        Mockito.when(bookingService.getOwnerItemsAll(userId, "state", pageable)).thenReturn(bookingDtoList);
+        Mockito.when(bookingService.getOwnerItemsAll(userId, "state", 0, 10)).thenReturn(bookingDtoList);
         ResponseEntity<List<BookingDto>> responce = bookingController.getOwnerItemsAll(userId, "state", 0, 10);
         assertEquals(HttpStatus.OK, responce.getStatusCode());
 

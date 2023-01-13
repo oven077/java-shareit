@@ -1,7 +1,9 @@
 package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dao.ItemRepository;
@@ -32,7 +34,8 @@ public class ItemRequestService {
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
         itemRequest = ItemRequestMapper.INSTANCE.itemRequestDtoToItemRequest(itemRequestDto);
-        itemRequest.setRequestor(userRepository.findById(userId).get());
+//        itemRequest.setRequestor(userRepository.findById(userId).get());
+        itemRequest.setRequestor(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found")));
         itemRequest.setCreated(LocalDateTime.now());
 
         return ItemRequestMapper.INSTANCE.itemRequestToItemRequestDto(itemRequestRepository.save(itemRequest));
@@ -40,7 +43,7 @@ public class ItemRequestService {
     }
 
     //todo
-    public List<ItemRequestDto> getItemRequests(int userId, Pageable pageable) {
+    public List<ItemRequestDto> getItemRequests(int userId, int page, int pageSize) {
 
         List<ItemRequestDto> itemRequestDtoList;
 
@@ -62,9 +65,11 @@ public class ItemRequestService {
         return itemRequestDtoList;
     }
 
-    public List<ItemRequestDto> getItemRequestsAllOther(int userId, Pageable pageable) {
+    public List<ItemRequestDto> getItemRequestsAllOther(int userId, int page, int pageSize) {
 
         List<ItemRequestDto> itemRequestDtoList;
+        Sort sort = Sort.by(Sort.Direction.DESC, "created");
+        final Pageable pageable = PageRequest.of(page, pageSize, sort);
 
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
 

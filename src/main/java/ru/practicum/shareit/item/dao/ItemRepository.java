@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional
+@Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 
@@ -18,7 +20,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     Optional<Item> findByItemAndOwnerId(@Param("id") Integer itemId, @Param("owner_id") Integer ownerId);
 
 
-    //не работает, просто для примера, со слов Янлдекса должно работать
+    //не работает, просто для примера, со слов Яндекса = Артем должно работать
     @Query(value = "select b.start_date, b.booker_id, b.item_id, b.end_date, b.id, b.status, i.name\n" +
             "\n" +
             "FROM bookings b\n" +
