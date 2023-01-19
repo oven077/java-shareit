@@ -41,7 +41,7 @@ public class UserController {
     public ResponseEntity<Object> getUser(@PathVariable int id) {
         log.info("controller:method userController -> getUser");
 
-        return ResponseEntity.ok(userClient.getUser(id));
+        return userClient.getUser(id);
     }
 
 
@@ -49,7 +49,7 @@ public class UserController {
     public ResponseEntity<Object> getUsers() {
         log.info("controller:method userController -> getAllUsers");
 
-        return ResponseEntity.ok(userClient.getUsers());
+        return userClient.getUsers();
 
     }
 
