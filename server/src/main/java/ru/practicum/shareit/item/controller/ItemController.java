@@ -39,8 +39,6 @@ public class ItemController {
         log.info("controller:method itemController -> updateItem");
 
         return ResponseEntity.ok(itemService.updateItem(item, itemId, userId));
-
-
     }
 
 
