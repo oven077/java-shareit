@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Jacksonized
 @Data
-
 public class UserDto {
     private int id;
     @NotNull

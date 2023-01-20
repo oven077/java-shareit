@@ -1,6 +1,8 @@
 package ru.practicum.shareit.request.dto;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -11,6 +13,8 @@ import java.util.List;
 /**
  * TODO Sprint add-item-requests.
  */
+@Builder
+@Jacksonized
 @Data
 public class ItemRequestDto {
 

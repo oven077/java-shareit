@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.dto;
+package ru.practicum.shareit.user;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

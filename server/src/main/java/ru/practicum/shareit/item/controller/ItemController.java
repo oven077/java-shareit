@@ -71,7 +71,7 @@ public class ItemController {
 
     @GetMapping("/search")
     @Validated
-    public ResponseEntity<Collection<ItemDto>> getAllItemsWithSearch(@Valid @RequestParam(defaultValue = "///") String text,
+    public ResponseEntity<Collection<ItemDto>> getAllItemsWithSearch(@Valid String text,
                                                                      @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getAllItemsWithSearch");
 
