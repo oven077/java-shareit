@@ -60,20 +60,12 @@ public class ItemController {
     }
 
 
+    @PostMapping("/{itemId}/comment")
+    public ResponseEntity<Object> addCommentByItemId(@PathVariable int itemId,
+                                                         @RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
+                                                         @RequestBody @Valid CommentDto commentDto) {
+        log.info("controller:method itemController -> getItemById");
 
-//    @PostMapping("/{itemId}/comment")
-//    public ResponseEntity<CommentDto> addCommentByItemId(@PathVariable int itemId,
-//                                                         @RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-//                                                         @RequestBody @Valid CommentDto commentDto) {
-//        log.info("controller:method itemController -> getItemById");
-//
-//        return ResponseEntity.ok(itemService.addCommentByItemId(itemId, userId, commentDto));
-//    }
-//
-//
-
-//
-
-//
-
+        return itemClient.addCommentByItemId(itemId, userId, commentDto);
+    }
 }

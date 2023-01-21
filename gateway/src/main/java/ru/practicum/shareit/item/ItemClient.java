@@ -41,4 +41,8 @@ public class ItemClient extends BaseClient {
     public ResponseEntity<Object> getAllItemsWithSearch(int userId, String text) {
         return get("/search?text=" + text, userId);
     }
+
+    public ResponseEntity<Object> addCommentByItemId(int itemId, int userId, CommentDto commentDto) {
+        return post("/" + itemId + "/comment", userId, commentDto);
+    }
 }
