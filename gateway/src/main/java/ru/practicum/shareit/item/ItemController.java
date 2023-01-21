@@ -36,7 +36,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ResponseEntity<Object> getItemById(@PathVariable int itemId,
-                                               @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+                                              @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getItemById");
 
         return itemClient.getItemByIdWithBookings(itemId, userId);
@@ -53,7 +53,7 @@ public class ItemController {
     @GetMapping("/search")
     @Validated
     public ResponseEntity<Object> getAllItemsWithSearch(@Valid @RequestParam(defaultValue = "///") String text,
-                                                                     @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+                                                        @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
         log.info("controller:method itemController -> getAllItemsWithSearch");
 
         return itemClient.getAllItemsWithSearch(userId, text);
@@ -62,8 +62,8 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> addCommentByItemId(@PathVariable int itemId,
-                                                         @RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-                                                         @RequestBody @Valid CommentDto commentDto) {
+                                                     @RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
+                                                     @RequestBody @Valid CommentDto commentDto) {
         log.info("controller:method itemController -> getItemById");
 
         return itemClient.addCommentByItemId(itemId, userId, commentDto);

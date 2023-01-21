@@ -38,16 +38,16 @@ public class ItemRequestController {
 
     @GetMapping()
     public ResponseEntity<Object> getItemRequests(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-                                                                      @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero int page,
-                                                                      @RequestParam(value = "size", defaultValue = "10") @Positive int pageSize) {
+                                                  @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero int page,
+                                                  @RequestParam(value = "size", defaultValue = "10") @Positive int pageSize) {
         log.info("controller:method userController -> getAllUsers");
         return itemRequestClient.getItemRequests(userId, page, pageSize);
     }
 
     @GetMapping("/all")
     public ResponseEntity<Object> getItemRequestsAllOther(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-                                                                        @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
-                                                                        @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
+                                                          @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
+                                                          @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
         log.info("controller:method userController -> getAllUsers");
         return itemRequestClient.getItemRequestsAllOther(userId, page, pageSize);
     }

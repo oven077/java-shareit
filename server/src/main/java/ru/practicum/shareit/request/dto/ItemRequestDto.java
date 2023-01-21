@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * TODO Sprint add-item-requests.
  */
-@Builder
+//@Builder
 @Jacksonized
 @Data
 public class ItemRequestDto {

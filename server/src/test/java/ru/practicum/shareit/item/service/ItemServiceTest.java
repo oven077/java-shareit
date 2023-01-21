@@ -1,4 +1,4 @@
-package ru.practicum.shareit1.item.service;
+package ru.practicum.shareit.item.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,6 @@ import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.mappers.ItemMapper;
-import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;

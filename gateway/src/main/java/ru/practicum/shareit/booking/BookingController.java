@@ -53,9 +53,9 @@ public class BookingController {
 
     @GetMapping("/owner")
     public ResponseEntity<Object> getOwnerItemsAll(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-                                                         @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
-                                                         @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
-                                                         @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
+                                                   @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+                                                   @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
+                                                   @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
 
         log.info("controller:method itemController -> getAllItems");
         return bookingClient.getOwnerItemsAll(userId, stateParam, page, pageSize);

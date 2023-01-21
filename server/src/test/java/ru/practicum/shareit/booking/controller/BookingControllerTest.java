@@ -1,4 +1,4 @@
-package ru.practicum.shareit1.booking.controller;
+package ru.practicum.shareit.booking.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
@@ -36,8 +35,6 @@ class BookingControllerTest {
         Mockito.when(bookingService.setApproveOrRejectBooking(bookingId, true, userId)).thenReturn(bookingDto);
         ResponseEntity<BookingDto> responce = bookingController.setApproveOrRejectBooking(bookingId, true, userId);
         assertEquals(HttpStatus.OK, responce.getStatusCode());
-
-
     }
 
     @Test
@@ -81,7 +78,5 @@ class BookingControllerTest {
         Mockito.when(bookingService.getOwnerItemsAll(userId, "state", 0, 10)).thenReturn(bookingDtoList);
         ResponseEntity<List<BookingDto>> responce = bookingController.getOwnerItemsAll(userId, "state", 0, 10);
         assertEquals(HttpStatus.OK, responce.getStatusCode());
-
-
     }
 }

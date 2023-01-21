@@ -3,8 +3,6 @@ package ru.practicum.shareit.item;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
-//import ru.practicum.shareit.item.model.Item;
-//import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -19,11 +17,11 @@ public class CommentDto {
     @NotEmpty
     private String text;
 
-//    private Item item;
+    //    private Item item;
     private String authorName;
 
 
-//    private User author;
+    //    private User author;
     private LocalDateTime created;
 
 
