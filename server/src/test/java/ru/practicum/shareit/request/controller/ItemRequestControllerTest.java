@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
@@ -50,7 +49,7 @@ class ItemRequestControllerTest {
         int itemId = 0;
         int userId = 0;
         List<ItemRequestDto> itemRequestDtoList = new ArrayList<>();
-        Mockito.when(itemRequestService.getItemRequests(userId,0,10)).thenReturn(itemRequestDtoList);
+        Mockito.when(itemRequestService.getItemRequests(userId, 0, 10)).thenReturn(itemRequestDtoList);
         ResponseEntity<Collection<ItemRequestDto>> responce = itemRequestController.getItemRequests(itemId, 0, 10);
         assertEquals(HttpStatus.OK, responce.getStatusCode());
     }
@@ -60,7 +59,7 @@ class ItemRequestControllerTest {
         int userId = 0;
         int itemId = 0;
         List<ItemRequestDto> itemRequestDtoList = new ArrayList<>();
-        Mockito.when(itemRequestService.getItemRequestsAllOther(userId,0,10)).thenReturn(itemRequestDtoList);
+        Mockito.when(itemRequestService.getItemRequestsAllOther(userId, 0, 10)).thenReturn(itemRequestDtoList);
         ResponseEntity<List<ItemRequestDto>> responce = itemRequestController.getItemRequestsAllOther(userId, 0, 10);
         assertEquals(HttpStatus.OK, responce.getStatusCode());
     }
