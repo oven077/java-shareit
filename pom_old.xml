@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.6</version>
+        <version>2.7.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -54,63 +54,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>1.5.3.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>1.5.3.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-maven-plugin</artifactId>
-            <version>4.7.3.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>jcl-over-slf4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>10.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.8</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>2.2.4</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -131,34 +74,6 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>1.18.24</version>
-                        </path>
-                        <!-- This is needed when using Lombok 1.18.16 and above -->
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>0.2.0</version>
-                        </path>
-                        <!-- Mapstruct should follow the lombok path(s) -->
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>1.5.3.Final</version>
-                        </path>
-                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
@@ -221,19 +136,6 @@
                     <version>0.8.8</version>
                     <configuration>
                         <output>file</output>
-                        <excludes>
-                            <exclude>**/*CommentMapperImpl.*</exclude>
-                            <exclude>**/*ItemMapperImpl.*</exclude>
-                            <exclude>**/*UserMapperImpl.*</exclude>
-                            <exclude>**/*BookingMapperImpl.*</exclude>
-                            <exclude>**/*ItemRequestMapperImpl.*</exclude>
-                            <exclude>**/*BookingMapper.*</exclude>
-                            <exclude>**/*ItemMapper.*</exclude>
-                            <exclude>**/*UserMapper.*</exclude>
-                            <exclude>**/*CommentMapper.*</exclude>
-                            <exclude>**/*ItemRequestMapper.*</exclude>
-
-                        </excludes>
                     </configuration>
                     <executions>
                         <execution>
@@ -248,18 +150,6 @@
                                 <goal>check</goal>
                             </goals>
                             <configuration>
-                                <excludes>
-                                    <exclude>**/*CommentMapperImpl.*</exclude>
-                                    <exclude>**/*ItemMapperImpl.*</exclude>
-                                    <exclude>**/*UserMapperImpl.*</exclude>
-                                    <exclude>**/*BookingMapperImpl.*</exclude>
-                                    <exclude>**/*ItemRequestMapperImpl.*</exclude>
-                                    <exclude>**/*BookingMapper.*</exclude>
-                                    <exclude>**/*ItemMapper.*</exclude>
-                                    <exclude>**/*UserMapper.*</exclude>
-                                    <exclude>**/*CommentMapper.*</exclude>
-                                    <exclude>**/*ItemRequestMapper.*</exclude>
-                                </excludes>
                                 <rules>
                                     <rule>
                                         <element>BUNDLE</element>
@@ -272,27 +162,27 @@
                                             <limit>
                                                 <counter>LINE</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.8</minimum>
+                                                <minimum>0.9</minimum>
                                             </limit>
                                             <limit>
                                                 <counter>BRANCH</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.4</minimum>
+                                                <minimum>0.6</minimum>
                                             </limit>
                                             <limit>
                                                 <counter>COMPLEXITY</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.4</minimum>
+                                                <minimum>0.6</minimum>
                                             </limit>
                                             <limit>
                                                 <counter>METHOD</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.5</minimum>
+                                                <minimum>0.7</minimum>
                                             </limit>
                                             <limit>
                                                 <counter>CLASS</counter>
                                                 <value>MISSEDCOUNT</value>
-                                                <maximum>10</maximum>
+                                                <maximum>1</maximum>
                                             </limit>
                                         </limits>
                                     </rule>
@@ -311,6 +201,7 @@
             </plugins>
         </pluginManagement>
     </build>
+
     <profiles>
         <profile>
             <id>check</id>
