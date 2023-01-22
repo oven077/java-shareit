@@ -176,12 +176,7 @@ class ItemServiceTest {
     @Test
     @Sql(value = {"/delete_ALL.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getAllItemsWithSearch() {
-
         Collection<ItemDto> itemDtos = itemService.getAllItemsWithSearch(0, "test");
-
-
         assertEquals(0, itemDtos.size());
     }
-
-
 }

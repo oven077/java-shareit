@@ -38,10 +38,9 @@ public class BookingService {
 
 
     private void checkBooking(BookingDto bookingDto, int userId, Item item) {
-        Boolean isAvailable;
         int itemId;
         itemId = item.getId();
-        isAvailable = item.getAvailable();
+        Boolean isAvailable = item.getAvailable();
 
 
         if (!isAvailable) {
@@ -108,11 +107,10 @@ public class BookingService {
     }
 
     public BookingDto getBooking(int bookingId, @Min(1) int userId) {
-        Booking booking;
 
         bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Not found booking with id: " + bookingId));
 
-        booking = bookingRepository.findById(bookingId).get();
+        Booking booking = bookingRepository.findById(bookingId).get();
 
         if (booking.getItem().getOwner().getId() != userId && booking.getBooker().getId() != userId) {
             throw new NotFoundException("Bad user booking: " + userId);

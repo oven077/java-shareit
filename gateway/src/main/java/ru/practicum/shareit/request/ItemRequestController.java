@@ -10,9 +10,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
-/**
- * TODO Sprint add-item-requests.
- */
 @RestController
 @Slf4j
 @RequestMapping(path = "/requests")

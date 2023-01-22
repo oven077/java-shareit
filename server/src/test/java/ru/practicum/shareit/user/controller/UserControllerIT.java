@@ -1,13 +1,16 @@
 package ru.practicum.shareit.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.service.BookingService;
@@ -22,8 +25,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
-@Transactional
-@SpringBootTest
+@SpringBootTest(properties = "db.name=test",
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase
+@ActiveProfiles("test")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @AutoConfigureMockMvc
 class UserControllerIT {
 
@@ -42,13 +48,6 @@ class UserControllerIT {
     @MockBean
     private UserService userService;
 
-    @Test
-    void createUser() {
-    }
-
-    @Test
-    void updateUser() {
-    }
 
     @SneakyThrows
     @Test

@@ -13,9 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
+
 @RestController
 @Slf4j
 @RequestMapping("/items")
@@ -26,7 +24,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping()
-    public ResponseEntity<ItemDto> createItem(@Valid @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId
+    public ResponseEntity<ItemDto> createItem(@Valid @RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId
     ) {
         log.info("controller:method itemController -> createItem");
 

@@ -11,9 +11,7 @@ import ru.practicum.shareit.user.service.UserService;
 import javax.validation.Valid;
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
+
 @RestController
 @Slf4j
 @RequestMapping(path = "/users")
@@ -32,7 +30,7 @@ public class UserController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable int id, @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody UserDto user) {
         log.info("controller:method userController -> updateUser");
 
         return ResponseEntity.ok(userService.updateUser(user, id));
@@ -40,7 +38,7 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable int id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
         log.info("controller:method userController -> getUser");
 
         return ResponseEntity.ok(userService.getUser(id));
@@ -56,7 +54,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable int id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Integer id) {
         log.info("controller:method userController -> deleteUser");
         return ResponseEntity.ok(userService.deleteUser(id));
     }

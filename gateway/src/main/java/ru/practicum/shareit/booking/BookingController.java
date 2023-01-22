@@ -46,16 +46,16 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> setApproveOrRejectBooking(@PathVariable int bookingId, @Valid @RequestParam Boolean approved,
-                                                            @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+                                                            @RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId) {
         log.info("controller:method itemController -> updateItem");
         return bookingClient.setApproveOrRejectBooking(bookingId, approved, userId);
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<Object> getOwnerItemsAll(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
+    public ResponseEntity<Object> getOwnerItemsAll(@RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId,
                                                    @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
-                                                   @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
-                                                   @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
+                                                   @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") Integer page,
+                                                   @Positive @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
 
         log.info("controller:method itemController -> getAllItems");
         return bookingClient.getOwnerItemsAll(userId, stateParam, page, pageSize);

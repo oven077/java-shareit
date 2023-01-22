@@ -14,9 +14,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * TODO Sprint add-item-requests.
- */
+
 @RestController
 @Slf4j
 @RequestMapping(path = "/requests")
@@ -26,7 +24,7 @@ public class ItemRequestController {
     private final ItemRequestService itemRequestService;
 
     @PostMapping()
-    public ResponseEntity<ItemRequestDto> createItemRequest(@Valid @RequestBody ItemRequestDto itemRequestDto, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<ItemRequestDto> createItemRequest(@Valid @RequestBody ItemRequestDto itemRequestDto, @RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId) {
         log.info("controller:method ItemRequest -> createItemRequest");
 
         return ResponseEntity.ok(itemRequestService.createItemRequest(itemRequestDto, userId));
@@ -34,7 +32,7 @@ public class ItemRequestController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ItemRequestDto> getItemRequestById(@PathVariable int id, @RequestHeader("X-Sharer-User-Id") @Min(1) int userId) {
+    public ResponseEntity<ItemRequestDto> getItemRequestById(@PathVariable int id, @RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId) {
         log.info("controller:method userController -> getUser");
 
         return ResponseEntity.ok(itemRequestService.getItemRequestById(id, userId));
@@ -42,18 +40,18 @@ public class ItemRequestController {
 
 
     @GetMapping()
-    public ResponseEntity<Collection<ItemRequestDto>> getItemRequests(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-                                                                      @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero int page,
-                                                                      @RequestParam(value = "size", defaultValue = "10") @Positive int pageSize) {
+    public ResponseEntity<Collection<ItemRequestDto>> getItemRequests(@RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId,
+                                                                      @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer page,
+                                                                      @RequestParam(value = "size", defaultValue = "10") @Positive Integer pageSize) {
         log.info("controller:method userController -> getAllUsers");
         return ResponseEntity.ok(itemRequestService.getItemRequests(userId, page, pageSize));
     }
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<ItemRequestDto>> getItemRequestsAllOther(@RequestHeader("X-Sharer-User-Id") @Min(1) int userId,
-                                                                        @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") int page,
-                                                                        @Positive @RequestParam(value = "size", defaultValue = "10") int pageSize) {
+    public ResponseEntity<List<ItemRequestDto>> getItemRequestsAllOther(@RequestHeader("X-Sharer-User-Id") @Min(1) Integer userId,
+                                                                        @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") Integer page,
+                                                                        @Positive @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
         log.info("controller:method userController -> getAllUsers");
         return ResponseEntity.ok(itemRequestService.getItemRequestsAllOther(userId, page, pageSize));
     }

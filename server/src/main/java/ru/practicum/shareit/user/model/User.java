@@ -6,10 +6,6 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Entity
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
